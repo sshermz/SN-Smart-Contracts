@@ -1,0 +1,31 @@
+<div [@routerTransition]>
+    <app-page-header [heading]="'Charts'" [icon]="'fa-bar-chart-o'"></app-page-header>
+    <div class="row">
+        <div class="col col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Ontology
+                </div>
+                <div class="card-block" id=d3chart1_card_block height="550px">
+                    <svg class="d3svgchart" id="d3chart1" height="420px"></svg>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
+                </div>
+            </div>
+        </div>
+        <div class="col col-sm-6">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Agents
+                </div>
+                <div class="card-block" id=d3chart2_card_block>
+                    <svg class="d3svgchart" id="d3chart2" height="420px"></svg>
+                  </div>
+                <div class="card-footer">
+                    <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

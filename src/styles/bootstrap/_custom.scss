@@ -1,0 +1,9 @@
+// Bootstrap overrides
+//
+// Copy variables from `_variables.scss` to this file to override default values
+// without modifying source files.
+
+// TODO: Not working. Temporarily modifying these directly in _variables.scss. Undo that once get these overrides working.
+$body-bg:#1D0A55;
+$carousel-control-color:                      $blue !default;
+$carousel-indicator-active-bg:                $blue !default;
