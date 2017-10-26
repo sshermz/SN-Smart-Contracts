@@ -51,8 +51,6 @@ export class ChartsComponent implements OnInit, AfterViewInit {
 
   private initD3Chart2() {
     // Bubble Chart reading from JSON file: https://bl.ocks.org/john-guerra/0d81ccfd24578d5d563c55e785b3b40a
-    //    const diameter = 960,
-    //    const diameter = 300,
     const width = document.getElementById('d3chart2_card_block').clientWidth,
       height = document.getElementById('d3chart2_card_block').clientHeight;
     const diameter = Math.min(width, height),
@@ -90,6 +88,7 @@ export class ChartsComponent implements OnInit, AfterViewInit {
         .attr('class', 'node')
         .attr('transform', function (d: any) { return 'translate(' + d.x + ',' + d.y + ')'; });
 
+      // Disabled: Standard tooltips
       // node.append('title')
       //   .html(function (d: any) {
       //     return d.data.name + ': ' + format(d.value);  // "name, size", like "Axis, 24,593"
@@ -103,15 +102,10 @@ export class ChartsComponent implements OnInit, AfterViewInit {
           return color(d.data.rating_avg);
         })
         .on('mouseover', function (d) {
-          // divTooltip.transition()
-          //   .duration(500)
-          //   .style('opacity', 0);
-          // divTooltip.transition()
-          //   .duration(200)
-          //   .style('opacity', .9);
-            divTooltip.transition().duration(100).style('opacity', .9);
+            divTooltip.style('opacity', .9);
             divTooltip.html(
             buildNodeTooltipHTML(d, true))
+            .style('pointer-events', 'none')  // Else the hidden tooltip can eat mouseovers.
             .style('left', (d3.event.pageX + 12) + 'px')
             .style('top', (d3.event.pageY - 12) + 'px')
             .style('position', 'absolute')
@@ -126,9 +120,7 @@ export class ChartsComponent implements OnInit, AfterViewInit {
             .style('box-shadow', '5px 5px 5px rgba(0, 0, 0, 0.1');
         })
         .on('mouseout', function (d) {
-          // divTooltip.transition()
-          //  .duration(500)
-          divTooltip.transition().delay(100).style('opacity', 0);
+          divTooltip.style('opacity', 0);
         });
 
       node.append('text')
