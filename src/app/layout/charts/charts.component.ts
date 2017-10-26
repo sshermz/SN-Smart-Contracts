@@ -32,8 +32,8 @@ export class ChartsComponent implements OnInit, AfterViewInit {
       .range([0, width]);
     const chart = d3.select('#d3chart1')
       .attr('width', width);
-      // .attr('height', barHeight * data.length);
-      // .attr('height', 300);
+    // .attr('height', barHeight * data.length);
+    // .attr('height', 300);
     const bar = chart.selectAll('g')
       .data(data)
       .enter().append('g')
@@ -51,26 +51,32 @@ export class ChartsComponent implements OnInit, AfterViewInit {
 
   private initD3Chart2() {
     // Bubble Chart reading from JSON file: https://bl.ocks.org/john-guerra/0d81ccfd24578d5d563c55e785b3b40a
-//    const diameter = 960,
-//    const diameter = 300,
-    const diameter = document.getElementById('d3chart2_card_block').clientWidth * 0.80,
-      format = d3.format(',d'),  // Format number w/thousands separator (https://github.com/d3/d3-format)
+    //    const diameter = 960,
+    //    const diameter = 300,
+    const diameter = document.getElementById('d3chart2_card_block').clientWidth * 0.75,
+      format = d3.format(',d'),
       colorScheme = d3.scaleOrdinal(d3.schemeCategory20c);
 
     const bubble = d3.pack()
       .size([diameter, diameter])
       .padding(1.5);
 
+    // Define div for tooltips
+    const divTooltip = d3.select('body')
+      .append('div')
+      .attr('class', 'tooltip')
+      .style('opacity', 0);
+
     const svg = d3.select('#d3chart2')
       .attr('width', diameter)
       // .attr('height', diameter)
       .attr('class', 'bubble');
 
-      d3.json('./../../../assets/agents.xtradata.json', function (error, data) {
+    d3.json('./../../../assets/agents.xtradata.json', function (error, data) {
       if (error) { throw error; }
 
       const root = d3.hierarchy(classes(data))
-        .sum(function (d: any) { return d.nodeValue; })
+        .sum(function (d: any) { return d.value; })
         .sort(function (a, b) { return b.value - a.value; });
 
       bubble(root);
@@ -80,31 +86,94 @@ export class ChartsComponent implements OnInit, AfterViewInit {
         .attr('class', 'node')
         .attr('transform', function (d: any) { return 'translate(' + d.x + ',' + d.y + ')'; });
 
-      node.append('title')
-        .text(function (d: any) {
-          return d.data.nodeName + ': ' + format(d.nodeValue);
-        });  // "name, size", like "Axis, 24,593"
+      // node.append('title')
+      //   .html(function (d: any) {
+      //     return d.data.name + ': ' + format(d.value);  // "name, size", like "Axis, 24,593"
+      //   });
 
       node.append('circle')
         .attr('r', function (d: any) { return d.r; })
         .style('fill', function (d: any) {
           // return colorScheme(d.data.packageName);
-          // console.log('packageName: ' + d.nodePackage);
-          return color(d.data.nodeRating);
+          // console.log('packageName: ' + d.package);
+          return color(d.data.rating_avg);
+        })
+        .on('mouseover', function (d) {
+          // divTooltip.transition()
+          //   .duration(500)
+          //   .style('opacity', 0);
+          // divTooltip.transition()
+          //   .duration(200)
+          //   .style('opacity', .9);
+            divTooltip.transition().duration(0).style('opacity', .9);
+            divTooltip.html(
+            buildNodeTooltipHTML(d, true))
+            .style('left', (d3.event.pageX + 12) + 'px')
+            .style('top', (d3.event.pageY - 12) + 'px')
+            .style('position', 'absolute')
+            .style('text-align', 'center')
+            .attr('width', '60px')
+            .attr('height', '28px')
+            .style('padding', '6px')
+            .style('font', '12px sans-serif;')
+            .style('background', 'lightsalmon')
+            .style('border', '0px')
+            .style('border-radius', '8px')
+            .style('box-shadow', '5px 5px 5px rgba(0, 0, 0, 0.1');
+        })
+        .on('mouseout', function (d) {
+          // divTooltip.transition()
+          //  .duration(500)
+          divTooltip.transition().delay(100).style('opacity', 0);
         });
 
       node.append('text')
         .attr('dy', '.3em')
         .style('text-anchor', 'middle')
+        .style('pointer-events', 'none')
+        .style('user-select', 'none')
         .text(function (d: any) {
-          // const name = d.data.className.substring(0, d.r / 3);
-          const name = d.data.nodeName.substring(0, 10) + '...';
-          return name;
+          const name = d.data.name.substring(0, d.r / 7);
+          return name.length < d.data.name.length ? name + '...' : name;
         });
     });
 
+    function buildNodeTooltipHTML(d, verbose) {
+      const headText = (d.data.description === '') ? d.data.name : d.data.description + '<hr>' + d.data.name;
+      const currencyFormat = d3.format(',.8f');
+      const wealthText = currencyFormat(d.data.wealth) + ' AGI';
+
+      // TODO: Add Semantic UI to support table styles
+      if (verbose) {
+        return '<div class=\'node-detailed-tooltip\'> <table class=\'ui celled striped table\'> <thead> <tr> <th colspan=\'2\'>'
+          + headText + '</th> </tr> </thead> <tbody> <tr> <td class=\'collapsing\'> <span>Wealth</span> </td> <td>'
+          + wealthText + '</td> </tr> <tr> <td> <span>Rating Count</span> </td> <td>' + d.data.rating_cnt
+          + '</td> </tr> <tr> <td> <span>Rating Average</span> </td> <td>' + d.data.rating_avg +
+          // '</td> </tr> <tr> <td> <span>TODO</span> </td> <td>' + d.data.TODO +
+          '</td> </tr> </tbody> </table> </div>';
+      } else {
+        return '<div class=\'node-tooltip\'> <table class=\'ui celled striped table\'> <tbody> <tr> <td nowrap>' + headText +
+          '</td> </tr> </tbody> </table> </div>';
+      }
+    }
+
     function color(val) {
-      return colorScheme(val.toString());
+      // return colorScheme(val.toString());
+
+      // tslint:disable:one-line
+      // Low - Reds
+      if (val < 0.1) { return '#BA2C48'; }
+      else if (val < 0.2) { return '#B0223E'; }
+      else if (val < 0.3) { return '#BA2C48'; }
+      // Mid- Yellows
+      else if (val < 0.4) { return '#CAB42D'; }
+      else if (val < 0.5) { return '#B7A13E'; }
+      else if (val < 0.6) { return '#A99743'; }
+      // High - Greens
+      else if (val < 0.7) { return '#49ABA1'; }
+      else if (val < 0.8) { return '#3FA197'; }
+      else if (val < 0.9) { return '#35978D'; }
+      else { return '#2B8D83'; }
     }
 
     // Returns a flattened hierarchy containing all leaf nodes under the root.
@@ -114,10 +183,14 @@ export class ChartsComponent implements OnInit, AfterViewInit {
       function recurse(name, node) {
         if (node.children) {
           node.children.forEach(function (child) { recurse(node.name, child); });
-        // } else { classes.push({ packageName: name, className: node.name, value: node.size, descriptionName: node.description,
-        //   wealthName: node.wealth }); }
-        } else { classes.push({ nodePackage: name, nodeValue: node.wealth, nodeName: node.name, nodeDescription: node.description,
-          nodeWealth: node.wealth, nodeRating: node.rating.average }); }
+          // } else { classes.push({ packageName: name, className: node.name, value: node.size, descriptionName: node.description,
+          //   wealthName: node.wealth }); }
+        } else {
+          classes.push({
+            package: name, value: node.wealth, name: node.name, description: node.description,
+            wealth: node.wealth, rating_avg: node.rating.average, rating_cnt: node.rating.count
+          });
+        }
       }
 
       recurse(null, root);

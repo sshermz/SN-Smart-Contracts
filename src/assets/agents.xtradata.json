@@ -3,9 +3,9 @@
     "children": [{
             "name": "0x9f7359f9b9c2762e55c01829bc5141130f563d3a",
             "description": "Ontologies' services",
-            "wealth": 3938,
+            "wealth": 393.70483016,
             "rating": {
-                "average": 0.9,
+                "average": 0.95,
                 "count": 9
             },
             "services": [{
@@ -348,11 +348,11 @@
             ]
         },
         {
-            "name": "0x72b94471e324456746af2a6c998d87224e1fe30e",
+            "name": "0xa2f40471e324456746af2a6c998d87224e1fe30e",
             "description": "Text summarization service",
-            "wealth": 2812,
+            "wealth": 281.01945562,
             "rating": {
-                "average": 0.4,
+                "average": 0.43,
                 "count": 2
             },
             "services": [{
@@ -777,11 +777,11 @@
             ]
         },
         {
-            "name": "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed",
+            "name": "0x09a2a12edb3d5e8e72ca1e74da8f1a34865c25ed",
             "description": "Text summarization service",
-            "wealth": 6714,
+            "wealth": 671.84076341,
             "rating": {
-                "average": 0.2,
+                "average": 0.11,
                 "count": 5
             },
             "services": [{
@@ -816,11 +816,11 @@
             ]
         },
         {
-          "name": "0x9f7359f9b9c2762e55c01829bc5141130f563d3a",
+          "name": "0x8f7359f9b9c2762e55c01829bc5141130f563d3a",
           "description": "Ontologies' services",
-          "wealth": 1938,
+          "wealth": 137.30470218,
           "rating": {
-              "average": 0.3,
+              "average": 0.39,
               "count": 9
           },
           "services": [{
@@ -1165,9 +1165,9 @@
       {
           "name": "0x72b94471e324456746af2a6c998d87224e1fe30e",
           "description": "Text summarization service",
-          "wealth": 8812,
+          "wealth": 881.60825124,
           "rating": {
-              "average": 0.9,
+              "average": 0.72,
               "count": 2
           },
           "services": [{
@@ -1592,11 +1592,11 @@
           ]
       },
       {
-          "name": "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed",
+          "name": "0x0fa9012edb3d5e8e72ca1e74da8f1a34865c25ed",
           "description": "Text summarization service",
-          "wealth": 4714,
+          "wealth": 563.20473420,
           "rating": {
-              "average": 0.2,
+              "average": 0.74,
               "count": 5
           },
           "services": [{
@@ -1631,11 +1631,11 @@
           ]
       },
       {
-        "name": "0x9f7359f9b9c2762e55c01829bc5141130f563d3a",
+        "name": "0x3e8349f9b9c2762e55c01829bc5141130f563d3a",
         "description": "Ontologies' services",
-        "wealth": 3938,
+        "wealth": 369.27852843,
         "rating": {
-            "average": 0.9,
+            "average": 0.15,
             "count": 9
         },
         "services": [{
@@ -1980,9 +1980,9 @@
     {
         "name": "0x72b94471e324456746af2a6c998d87224e1fe30e",
         "description": "Text summarization service",
-        "wealth": 2812,
+        "wealth": 375.58975028,
         "rating": {
-            "average": 0.4,
+            "average": 0.67,
             "count": 2
         },
         "services": [{
@@ -2366,7 +2366,7 @@
                     "description": "Second agent providing text summarization service",
                     "wealth": null,
                     "rating": {
-                        "average": 0.2,
+                        "average": 0.87,
                         "count": 5
                     },
                     "services": [{
@@ -2409,9 +2409,9 @@
     {
         "name": "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed",
         "description": "Text summarization service",
-        "wealth": 6714,
+        "wealth": 728.62395308,
         "rating": {
-            "average": 0.2,
+            "average": 0.82,
             "count": 5
         },
         "services": [{

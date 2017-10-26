@@ -2,8 +2,7 @@
 
 **This is an in-progress version of a quick and dirty demo. The charts are placeholders and requires substantial development work.**
 
-Derived from 'SB Admin rewritten in Angular4 and Bootstrap 4'
-https://github.com/start-angular/SB-Admin-BS4-Angular-4
+Derived from [SB Admin rewritten in Angular4 and Bootstrap 4](https://github.com/start-angular/SB-Admin-BS4-Angular-4).
 
 ### Usage
 
@@ -17,7 +16,9 @@ $ cd SN Smart Contracts
 # install the project's dependencies
 $ npm install
 
-# watches your files and uses livereload by default run `npm start` for a dev server. Navigate to `http://localhost:4201/dashboard`. The app will automatically reload if you change any of the source files. If you get the login page, enter anything or nothing and click on the Login button.
+# watches your files and uses livereload by default run `npm start` for a dev server. Navigate to 
+# `http://localhost:4201/dashboard`. The app will automatically reload if you change any of the 
+# source files. If you get the login page, enter anything or nothing and click on the Login button.
 $ npm start
 
 # As above but to override the default port
@@ -28,9 +29,10 @@ $ ng serve --ec true --port 8080
 $ npm run build
 ```
 
-Install Steps for deploying prebuilt production build (./dist files) on Node.js http-server
+Install Steps for deploying prebuilt production build (./dist files) on Node.js http-server:
 ```
-These steps assume that you have been provided the ./dist subdirectory from a production build via 'npm run build'.
+These steps assume that you have been provided the ./dist subdirectory from a production build via 
+'npm run build'.
 
 1) Install Node.js
 
@@ -67,7 +69,8 @@ Starting up http-server, serving ./dist
 Available on:
   http://255.255.255.255:8080
 
-In fact, there may be several URLs. Copy/paste any of the URLs into your browser. Chrome recommended, but should work with other browsers (not tested yet).
+In fact, there may be several URLs. Copy/paste any of the URLs into your browser. Chrome recommended, 
+but should work with other browsers (not tested yet).
 ```
 ---
 

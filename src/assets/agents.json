@@ -3,7 +3,7 @@
     "children": [{
             "name": "0x9f7359f9b9c2762e55c01829bc5141130f563d3a",
             "description": "Ontologies' services",
-            "wealth": 3938,
+            "wealth": 393,
             "rating": {
                 "average": 0.9,
                 "count": 9
@@ -350,7 +350,7 @@
         {
             "name": "0x72b94471e324456746af2a6c998d87224e1fe30e",
             "description": "Text summarization service",
-            "wealth": 2812,
+            "wealth": 281,
             "rating": {
                 "average": 0.4,
                 "count": 2
@@ -779,7 +779,7 @@
         {
             "name": "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed",
             "description": "Text summarization service",
-            "wealth": 6714,
+            "wealth": 671,
             "rating": {
                 "average": 0.2,
                 "count": 5
