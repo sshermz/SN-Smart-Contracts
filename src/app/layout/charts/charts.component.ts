@@ -53,13 +53,15 @@ export class ChartsComponent implements OnInit, AfterViewInit {
     // Bubble Chart reading from JSON file: https://bl.ocks.org/john-guerra/0d81ccfd24578d5d563c55e785b3b40a
     //    const diameter = 960,
     //    const diameter = 300,
-    const diameter = document.getElementById('d3chart2_card_block').clientWidth * 0.75,
+    const width = document.getElementById('d3chart2_card_block').clientWidth,
+      height = document.getElementById('d3chart2_card_block').clientHeight;
+    const diameter = Math.min(width, height),
       format = d3.format(',d'),
       colorScheme = d3.scaleOrdinal(d3.schemeCategory20c);
 
     const bubble = d3.pack()
-      .size([diameter, diameter])
-      .padding(1.5);
+      .size([diameter * 0.9, diameter * 0.9])
+      .padding(2);
 
     // Define div for tooltips
     const divTooltip = d3.select('body')
@@ -67,8 +69,10 @@ export class ChartsComponent implements OnInit, AfterViewInit {
       .attr('class', 'tooltip')
       .style('opacity', 0);
 
+    const x = (width - diameter) / 2, y = (height - diameter) / 2;
     const svg = d3.select('#d3chart2')
       .attr('width', diameter)
+      .attr('transform', 'translate(' + x + ',' + y + ')')
       // .attr('height', diameter)
       .attr('class', 'bubble');
 
@@ -105,7 +109,7 @@ export class ChartsComponent implements OnInit, AfterViewInit {
           // divTooltip.transition()
           //   .duration(200)
           //   .style('opacity', .9);
-            divTooltip.transition().duration(0).style('opacity', .9);
+            divTooltip.transition().duration(100).style('opacity', .9);
             divTooltip.html(
             buildNodeTooltipHTML(d, true))
             .style('left', (d3.event.pageX + 12) + 'px')
@@ -162,18 +166,18 @@ export class ChartsComponent implements OnInit, AfterViewInit {
 
       // tslint:disable:one-line
       // Low - Reds
-      if (val < 0.1) { return '#BA2C48'; }
-      else if (val < 0.2) { return '#B0223E'; }
-      else if (val < 0.3) { return '#BA2C48'; }
+      if (val < 0.1) { return '#C4373C'; }
+      else if (val < 0.2) { return '#BA2C48'; }
+      else if (val < 0.3) { return '#9C0E2A'; }
       // Mid- Yellows
       else if (val < 0.4) { return '#CAB42D'; }
       else if (val < 0.5) { return '#B7A13E'; }
       else if (val < 0.6) { return '#A99743'; }
       // High - Greens
-      else if (val < 0.7) { return '#49ABA1'; }
-      else if (val < 0.8) { return '#3FA197'; }
-      else if (val < 0.9) { return '#35978D'; }
-      else { return '#2B8D83'; }
+      else if (val < 0.7) { return '#2B8D83'; }
+      else if (val < 0.8) { return '#35978D'; }
+      else if (val < 0.9) { return '#3FA197'; }
+      else { return '#49ABA1'; }
     }
 
     // Returns a flattened hierarchy containing all leaf nodes under the root.

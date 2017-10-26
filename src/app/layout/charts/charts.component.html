@@ -1,7 +1,7 @@
 <div [@routerTransition]>
-    <app-page-header [heading]="'Charts'" [icon]="'fa-bar-chart-o'"></app-page-header>
+    <app-page-header [heading]="'Smart Contracts'" [icon]="'fa-bar-chart-o'"></app-page-header>
     <div class="row">
-        <div class="col col-sm-6">
+        <!-- <div class="col col-sm-6">
             <div class="card mb-3">
                 <div class="card-header">
                     Ontology (TODO)
@@ -22,6 +22,19 @@
                 <div class="card-block" id=d3chart2_card_block>
                     <svg class="d3svgchart" id="d3chart2" height="480px"></svg>
                   </div>
+                <div class="card-footer">
+                    <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
+                </div>
+            </div>
+        </div> -->
+        <div class="col col-sm-12">
+            <div class="card mb-3">
+                <div class="card-header">
+                    Agents
+                </div>
+                <div class="card-block" id=d3chart2_card_block>
+                    <svg class="d3svgchart" id="d3chart2" height="580px"></svg>
+                </div>
                 <div class="card-footer">
                     <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
                 </div>

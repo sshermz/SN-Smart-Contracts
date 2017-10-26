@@ -10,7 +10,7 @@ Derived from [SB Admin rewritten in Angular4 and Bootstrap 4](https://github.com
 
 In order to start the project use:
 ```bash
-$ git clone <TODO>
+$ git clone https://github.com/sshermz/SN-Smart-Contracts
 $ cd SN Smart Contracts
 
 # install the project's dependencies
