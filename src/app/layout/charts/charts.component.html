@@ -1,42 +1,61 @@
 <div [@routerTransition]>
     <app-page-header [heading]="'Smart Contracts'" [icon]="'fa-bar-chart-o'"></app-page-header>
     <div class="row">
-        <!-- <div class="col col-sm-6">
+        <div class="col col-sm-6">
             <div class="card mb-3">
                 <div class="card-header">
-                    Ontology (TODO)
+                    <ul class="nav nav-tabs nav-justified card-header-tabs" role="tablist" id="myTabs">
+                        <li class="nav-item" role="presentation">
+                            <a *ngIf="isServicesChart" class="nav-link active" href="javascript:void(0)" (click)="toggleChart()">Services</a>
+                            <a *ngIf="!isServicesChart" class="nav-link" href="javascript:void(0)" (click)="toggleChart()">Services</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a *ngIf="isServicesChart" class="nav-link" href="javascript:void(0)" (click)="toggleChart()">Activity</a>
+                            <a *ngIf="!isServicesChart" class="nav-link active" href="javascript:void(0)" (click)="toggleChart()">Activity</a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="card-block" id=d3chart1_card_block>
-                    <svg class="d3svgchart" id="d3chart1" height="480px"></svg>
+                    <!-- <svg *ngIf="isServicesChart" class="d3svgchart" id="d3chart1" height="540px"></svg>
+                    <svg *ngIf="!isServicesChart" class="d3svgchart" id="d3chart1b" height="540px"></svg> -->
+                    <svg class="d3svgchart" id="d3chart1" height="540px"></svg>
+                    <!-- <svg class="d3svgchart" id="d3chart1b" height="540px" style="opacity:0"></svg> -->
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
+                    <div *ngIf="isShowBtnsChart1">
+                        <button class="btn btn-info btn-sm" style="float:left" data-content="Collapse All" (click)="collapse_all()">
+                            <span class="fa fa-compress fa-lg"></span>
+                        </button>
+                    </div>
+                    <svg class="d3svgchart_legend" id="d3chart1_legend" width="165px"></svg>
+                    <div *ngIf="isShowBtnsChart1">
+                        <button class="btn btn-info btn-sm" style="float:right" (click)="expand_all()">
+                            <span class="fa fa-expand fa-lg"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col col-sm-6">
             <div class="card mb-3">
                 <div class="card-header">
-                    Agents
+                    <span>Agents</span>
                 </div>
                 <div class="card-block" id=d3chart2_card_block>
-                    <svg class="d3svgchart" id="d3chart2" height="480px"></svg>
-                  </div>
-                <div class="card-footer">
-                    <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
-                </div>
-            </div>
-        </div> -->
-        <div class="col col-sm-12">
-            <div class="card mb-3">
-                <div class="card-header">
-                    Agents
-                </div>
-                <div class="card-block" id=d3chart2_card_block>
-                    <svg class="d3svgchart" id="d3chart2" height="580px"></svg>
+                    <svg class="d3svgchart" id="d3chart2" height="540px"></svg>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-info btn-sm" (click)="randomize()">Update</button>
+                    <div *ngIf="isShowBtnsChart2">
+                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="remove_agent()">
+                            <span class="fa fa-user-times fa-lg"></span>
+                        </button>
+                    </div>
+                    <svg class="d3svgchart_legend" id="d3chart2_legend" width="165px"></svg>
+                    <div *ngIf="isShowBtnsChart2">
+                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="hire_agent()">
+                            <span class="fa fa-user-plus fa-lg"></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

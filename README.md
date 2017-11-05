@@ -1,6 +1,6 @@
 # SingularityNET Smart Contracts Demo #
 
-**This is an in-progress version of a quick and dirty demo. The charts are placeholders and requires substantial development work.**
+**Prototype Demo version with mock data. This is an in-progress version and requires further development work, including that the data schemas and data handling needs refactoring, etc.**
 
 Derived from [SB Admin rewritten in Angular4 and Bootstrap 4](https://github.com/start-angular/SB-Admin-BS4-Angular-4).
 

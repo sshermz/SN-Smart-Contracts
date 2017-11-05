@@ -1,3 +1,83 @@
+// .right.floated {
+//   float: right;
+//   vertical-align: middle;
+//   position: relative;  
+//   margin: 0 auto;
+//   // margin-top: 10px;
+// }
+// div.card-footer {
+//   border: 2px solid blue;
+//   // height: 20px;
+//   position: relative;  
+//   display: block;
+//   display: inline-block;
+//   justify-content:center;
+//   vertical-align: middle;
+// }
+
+.d3svgchart {
+  height: 540px;
+}
+
+// #d3chart1b {
+//   display: none;
+// }
+
+.d3svgchart_legend {
+  height: 58px;
+  margin: 0 auto;
+  // display: inline-block;
+  flex-shrink: 0;
+}
+
+// #d3chart1_legend > text:nth-child(1) {
+//   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
+// }
+// #d3chart2_legend > text:nth-child(1) {
+//   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
+// }
+// .d3svgchart_legend .text {
+//   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
+//   // font-family: 'arial' !important;
+//   font-weight: 'normal' !important;
+// }
+
+.card-block {
+  height: 586px;
+}
+
+.card-header {
+  height: 54px;
+}
+
+.card-footer {
+  height: 80px;
+  // white-space: nowrap;
+  display: inline-flex;
+  // justify-content: space-between;
+}
+
+.card-footer button {
+  white-space: nowrap;
+  // margin-top: 10px;
+  margin: 10px;
+}
+
+// TODO: Not working
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 3px;
+}
+.node text {
+  font: 12px sans-serif;
+}
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
+}
+
 // TODO: Not working
 div.tooltip {
   position: absolute;	
@@ -9,31 +89,4 @@ div.tooltip {
   background: lightsalmon;	
   border: 0px;					
   border-radius: 8px;
- /*  pointer-events: none;	This line needs to be removed */
 }
-
-// TODO: Not working
-#d3chart1 rect {
-  fill: steelblue;
-}
-#d3chart1 text {
-  fill: white;
-  font: 10px sans-serif;
-  text-anchor: end;
-}
-
-#d3chart1 {
-  fill: steelblue;
-  font: 10px sans-serif;
-  text-anchor: end;
-}
-
-// .d3svgchart {
-//   font: 10px sans-serif;
-//   // background-color: steelblue;
-//   text-align: right;
-//   // text-anchor: end;
-//   padding: 3px;
-//   margin: 1px;
-//   color: white;
-// }

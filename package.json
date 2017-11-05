@@ -27,6 +27,7 @@
     "@ngx-translate/http-loader": "^0.1.0",
     "core-js": "^2.5.1",
     "d3": "^4.11.0",
+    "d3-colorbar": "0.0.1",
     "d3-scale-chromatic": "^1.1.1",
     "font-awesome": "^4.7.0",
     "ng2-charts": "^1.6.0",

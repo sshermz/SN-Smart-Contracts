@@ -1,0 +1,158 @@
+[
+  {
+    "id": "f8fc0e98-b78a-4d3a-8d7f-344700dc0926",
+    "description": "Video Analysis",
+    "agents": [
+      "0x9f7359f9b9c2762e55c01829bc5141130f563d3a"
+    ],
+    "services": [
+      {
+        "id": "450d54bc-17d1-42d4-a894-656a97ded304",
+        "description": "Face Identification"
+      },
+      {
+        "id": "92cc1211-1926-4171-a2c3-3d3fbf9201ad",
+        "description": "Facial Emotion Recognition"
+      },
+      {
+        "id": "b8635774-1c7c-4922-87b3-8938408a8588",
+        "description": "Scene Description"
+      },
+      {
+        "id": "a254d5a9-a6cc-40ae-8b89-0f53e2237ccd",
+        "description": "Visual Salience Detection"
+      }
+    ]
+  },
+  {
+    "id": "017339cc-c1cf-4340-9637-5e0612851d31",
+    "description": "Image Analysis",
+    "agents": [
+      "0x9f7359f9b9c2762e55c01829bc5141130f563d3a"      
+    ],
+    "services": [
+      {
+        "id": "0101290e-b13d-4ad2-8404-20c9762854cd",
+        "description": "Face Identification"
+      },
+      {
+        "id": "396cfeda-ae9f-45eb-85e3-1a15b449c343",
+        "description": "Facial Emotion Recognition"
+      },
+      {
+        "id": "720c0512-033a-408f-ba03-7462e70efa39",
+        "description": "Object Recognition"
+      },
+      {
+        "id": "3d80edcb-b919-4b7b-ac4f-fdac958d6c50",
+        "description": "Visual Salience Detection"
+      },
+      {
+        "id": "c9c9788d-3856-4a0b-9d10-766335f5af28",
+        "description": "Image Summarization"
+      }
+    ]
+  },
+  {
+    "id": "1d7cbde5-32b2-49d0-94a2-f9cea3c1b8c9",    
+    "description": "Audio Analysis",
+    "agents": [
+      "0x9f7359f9b9c2762e55c01829bc5141130f563d3a"      
+    ],
+    "services": [
+      {
+        "id": "71d46d5a-d8b2-42d4-be20-30a3a76902b5",
+        "description": "Voice Identification"
+      },
+      {
+        "id": "713368fd-df54-4e1d-ace2-cde5de127246",
+        "description": "Voice Emotion Recognition"
+      },
+      {
+        "id": "c652fa0d-2c99-493d-9c78-959eab53317c",
+        "description": "Speech to Text Conversion"
+      }
+    ]
+  },
+  {
+    "id": "1e2baaed-165e-488d-88bc-3f08ecd01180",
+    "description": "Natural Language Processing",
+    "agents": [
+      "0x9f7359f9b9c2762e55c01829bc5141130f563d3a",
+      "0x72b94471e324456746af2a6c998d87224e1fe30e",
+      "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
+    ],
+    "services": [
+      {
+        "id": "8407b416-5312-4c0c-80d2-883d1910098c",
+        "description": "Syntax Parsing"
+      },
+      {
+        "id": "b854b6a5-ac4f-4734-b8c6-385b69169622",
+        "description": "Semantic Relation Extraction"
+      },
+      {
+        "id": "ee75003a-4b2d-413e-bce7-e44d1977dfec",
+        "description": "Logical Relation Extraction"
+      },
+      {
+        "id": "cc4ba8cf-4bd6-4f53-a614-568cb58402c8",
+        "description": "Biological Relation Extraction"
+      },
+      {
+        "id": "2f18e416-2461-4667-8ae3-9b668a6781e0",
+        "description": "Document Summarization"
+      },
+      {
+        "id": "8163dedb-ea01-4f80-8b3f-0ea7dd511e67",
+        "description": "Text Summarization"
+      },
+      {
+        "id": "dfc92b80-fd27-4b7c-beae-943cec1318aa",
+        "description": "Named Entity Recognition"
+      },
+      {
+        "id": "84c4c596-9030-4217-b4c2-a109c29cea19",
+        "description": "Biological Named Entity Recognition"
+      }
+    ]
+  },
+  {
+    "id": "1b89a609-63b0-419d-9af4-f8deb6dee5f2",
+    "description": "Dialogue",
+    "agents": [
+      "0x9f7359f9b9c2762e55c01829bc5141130f563d3a"
+    ],
+    "services": [
+      {
+        "id": "2e7315fe-c918-441b-aa74-9155514fcd87",
+        "description": "Loving AI Chatbot"
+      },
+      {
+        "id": "dabbe737-1d0d-4b18-9ed6-33cdc9309a12",
+        "description": "Sophia Chatbot"
+      },
+      {
+        "id": "adbf27b8-15cb-4ccd-b56d-4819cef8dfbe",
+        "description": "Ghost Chatbot"
+      }
+    ]
+  },
+  {
+    "id": "69a4af57-2daf-4669-99d3-add23ebecc23",
+    "description": "Biological Data Analysis",
+    "agents": [
+      "0x9f7359f9b9c2762e55c01829bc5141130f563d3a"      
+    ],
+    "services": [
+      {
+        "id": "6f2a2917-c615-4ac6-81c7-0f60f8d3d584",
+        "description": "Gene Expression Supervised Learning"
+      },
+      {
+        "id": "edad3ea4-bc73-4a77-af0b-f9bdf92d7bfe",
+        "description": "Longevity Prediction"
+      }
+    ]
+  }
+]
