@@ -32,8 +32,10 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   private svgMargin = { top: 20, right: 20, bottom: 20, left: 20 };
   private widthChart1 = 0;
   private widthChart1b = 0;
-  private duration = 750;
-  private durationFadeCharts = 1500;
+  private durationMoveElement = 750;
+  private durationFadeCharts = 2000;
+  private durationFadeActivityChart = 1500;
+  private durationFadeBubbleChart = 1250;
   private agentCoveredCnt = 5;
   private clrServicesNodeOutline = 'steelblue';
   private clrHighlight = 'lightsalmon';
@@ -82,14 +84,14 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.lastWindowWidth = window.innerWidth;
 
     // Init Charts
-    this.initChart1(this);
+    this.initChart1a(this);
     this.initChart1b(this);
     this.initChart2(this);
 
     // Draw Charts
     this.fadeCharts(false);
     if (this.isServicesChart) {
-      this.drawChart1(this);
+      this.drawChart1a(this);
     } else {
       this.drawChart1b(this);
     }
@@ -105,7 +107,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
       self.fadeCharts(false);
       if (self.isServicesChart) {
-        self.drawChart1(self);
+        self.drawChart1a(self);
       } else {
         self.drawChart1b(self);
       }
@@ -120,9 +122,10 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private fadeCharts(isFadeIn: boolean) {
     if (isFadeIn) {
-      const duration = this.isServicesChart ? this.durationFadeCharts : this.durationFadeCharts;
-      d3.select('#d3chart1').transition().duration(duration).style('opacity', 1);
-      d3.select('#d3chart2').transition().duration(this.durationFadeCharts).style('opacity', 1);
+      // const duration = this.isServicesChart ? this.durationFadeServiceChart : this.durationFadeCharts;
+      d3.select('#d3chart1').transition().duration(this.durationFadeCharts).style('opacity', 1);
+//      d3.select('#d3chart2').transition().duration(this.durationFadeCharts).style('opacity', 1);
+      d3.select('#d3chart2').transition().duration(0).style('opacity', 1);
     } else {
       d3.select('#d3chart1').style('opacity', 0);
       d3.select('#d3chart2').style('opacity', 0);
@@ -132,7 +135,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   private toggleChart() {
     this.isServicesChart = !this.isServicesChart;
     if (this.isServicesChart) {
-      this.drawChart1(this);
+      this.drawChart1a(this);
     } else {
       this.drawChart1b(this);
     }
@@ -141,14 +144,14 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   private expand_all() {
     // console.log('expandAll()');
     ChartsComponent.expand(this.root);
-    this.updateChart1(this, this.root);
+    this.updateChart1a(this, this.root);
   }
 
   private collapse_all() {
     // console.log('collapseAll()');
     this.root.children.forEach(ChartsComponent.collapse);
     ChartsComponent.collapse(this.root);
-    this.updateChart1(this, this.root);
+    this.updateChart1a(this, this.root);
   }
 
   private hire_agent() {
@@ -166,7 +169,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // Toggle children on click
-  private clickChart1(ths, d) {
+  private clickChart1a(ths, d) {
     ths.divTooltip1.style('opacity', 0);
     if (!(d.children || d._children)) { return; }
     if (d.children) {
@@ -176,7 +179,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       d.children = d._children;
       d._children = null;
     }
-    ths.updateChart1(ths, d);
+    ths.updateChart1a(ths, d);
   }
 
   private contains(a, obj) {
@@ -196,16 +199,16 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
    */
 
   /*
-   * initChart1()
+   * initChart1a()
    */
-  private initChart1(ths) {
+  private initChart1a(ths) {
     ths.isInitialLoadChart1 = false;
   }
 
   /*
-   * drawChart1()
+   * drawChart1a()
    */
-  private drawChart1(ths) {
+  private drawChart1a(ths) {
     const width = document.getElementById('d3chart1_card_block').clientWidth;
     const height = document.getElementById('d3chart1_card_block').clientHeight;
     const marginFactor = 0.85;
@@ -244,6 +247,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .attr('class', 'tree')
       .attr('transform', 'translate(' + this.svgMargin.left + ',' + this.svgMargin.top + ')')
 
+    // Get the data and build the elements
     d3.json(fileJSON, function (error, treeData) {
       if (error) { throw error; }
 
@@ -256,7 +260,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       // Collapse after 2nd level
       ths.root.children.forEach(ChartsComponent.collapse);
 
-      ths.updateChart1(ths, ths.root);
+      ths.updateChart1a(ths, ths.root);
     });
 
     // Legend
@@ -273,9 +277,9 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   }  /* End drawChart1 */
 
   /*
-   * updateChart1()
+   * updateChart1a()
    */
-  private updateChart1(ths, source) {
+  private updateChart1a(ths, source) {
     // Assigns the x and y position for the nodes
     const treeData = this.treemap(ths.root);
 
@@ -300,61 +304,15 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .attr('class', 'node')
       .attr('transform', function (d) { return 'translate(' + source.y0 + ',' + source.x0 + ')'; })
       .on('click', function (d) {
-        ths.clickChart1(ths, d);
+        ths.clickChart1a(ths, d);
       });
 
     // Add Circle for the nodes
     nodeEnter.append('circle')
       .attr('class', 'c1_circle')
       .attr('r', 1e-6)
-      .on('mouseover', function (d: any) {
-        if (!ths.isServicesChart) { return; }
-        d3.selectAll('.c1_circle')
-          .style('stroke', function (o: any) {
-            return d.data.id === o.data.id ? ths.clrHighlight : ths.clrServicesNodeOutline;
-          });
-
-        /* Chart interactivity: Highlight matching agents in Chart2 - Bubble Chart */
-        d.data.agents.forEach(function (o, i) {
-          const agent = o;
-          d3.selectAll('.c2_circle')
-            .style('stroke', function (p: any) {
-              return agent === p.data.address ? ths.clrRemoteHighlight : 'white';
-            }).style('stroke-width', function (p: any) {
-              return agent === p.data.address ? ths.strokewidthHighlight : '1';
-            });
-        });
-        /* End chart interactivity */
-
-        ths.divTooltip1.style('opacity', .9);
-        ths.divTooltip1.html(
-          buildNodeTooltipHTML(d, true))
-          .style('pointer-events', 'none')  // Else the hidden tooltip can eat mouseovers.
-          .style('left', (d3.event.pageX + 12) + 'px')
-          .style('top', (d3.event.pageY - 12) + 'px')
-          .style('position', 'absolute')
-          .style('text-align', 'center')
-          .attr('width', '60px')
-          .attr('height', '28px')
-          .style('padding', '6px')
-          .style('font', '12px sans-serif;')
-          .style('background', 'lightsalmon')
-          .style('border', '0px')
-          .style('border-radius', '8px')
-          .style('box-shadow', '5px 5px 5px rgba(0, 0, 0, 0.1');
-      })
-      .on('mouseout', function (d: any) {
-        d3.selectAll('.c1_circle')
-          .style('stroke', ths.clrServicesNodeOutline)
-          .style('stroke-width', '3');
-        ths.divTooltip1.style('opacity', 0);
-
-        /* Chart interactivity: Revert highlighting in other chart */
-        d3.selectAll('.c2_circle')
-          .style('stroke', 'white')
-          .style('stroke-width', '1');
-        /* End chart interactivity */
-      });
+      .on('mouseover', (d) => { mouseOver(ths, d); })
+      .on('mouseout', (d) => { mouseOut(ths, d); });
 
     // Add label shadows for the nodes (Places left or right depending on whether node has children or not)
     nodeEnter.append('text')
@@ -429,7 +387,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Transition nodes to their new position
     nodeUpdate.transition()
-      .duration(ths.duration)
+      .duration(ths.durationMoveElement)
       .attr('transform', function (d) { return 'translate(' + d.y + ',' + d.x + ')'; });
 
     // Update the node attributes and style
@@ -454,7 +412,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Transition exiting nodes to the parent's new position (Remove exiting nodes)
     const nodeExit = node.exit().transition()
-      .duration(ths.duration)
+      .duration(ths.durationMoveElement)
       .attr('transform', function (d) { return 'translate(' + source.y + ',' + source.x + ')'; })
       .remove();
 
@@ -490,13 +448,13 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Transition links back to parent element position
     linkUpdate.transition()
-      .duration(ths.duration)
+      .duration(ths.durationMoveElement)
       .attr('d', function (d) { return ths.diagonal(d, d.parent) });
     // .attr('d', d3.linkHorizontal().x(function (d: any) { return d.y; }).y(function (d: any) { return d.x; }));
 
     // Transition exiting nodes to the parent's new position (remove any exiting links)
     const linkExit = link.exit().transition()
-      .duration(ths.duration)
+      .duration(ths.durationMoveElement)
       .attr('d', function (d) {
         const o = { x: source.x, y: source.y };
         return ths.diagonal(o, o);
@@ -510,7 +468,59 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       d.y0 = d.y;
     });
 
-    function buildNodeTooltipHTML(d, verbose) {
+  // tslint:disable-next-line:no-shadowed-variable
+  function mouseOver(ths, d: any) {
+    if (!ths.isServicesChart) { return; }
+    d3.selectAll('.c1_circle')
+      .style('stroke', function (o: any) {
+        return d.data.id === o.data.id ? ths.clrHighlight : ths.clrServicesNodeOutline;
+      });
+
+    /* Chart interactivity: Highlight matching agents in Chart2 - Bubble Chart */
+    d.data.agents.forEach(function (o, i) {
+      const agent = o;
+      d3.selectAll('.c2_circle')
+        .style('stroke', function (p: any) {
+          return agent === p.data.address ? ths.clrRemoteHighlight : 'white';
+        }).style('stroke-width', function (p: any) {
+          return agent === p.data.address ? ths.strokewidthHighlight : '1';
+        });
+    });
+    /* End chart interactivity */
+
+    ths.divTooltip1.style('opacity', .9);
+    ths.divTooltip1.html(
+      buildNodeTooltipHTML(d, true))
+      .style('pointer-events', 'none')  // Else the hidden tooltip can eat mouseovers.
+      .style('left', (d3.event.pageX + 12) + 'px')
+      .style('top', (d3.event.pageY - 12) + 'px')
+      .style('position', 'absolute')
+      .style('text-align', 'center')
+      .attr('width', '60px')
+      .attr('height', '28px')
+      .style('padding', '6px')
+      .style('font', '12px sans-serif;')
+      .style('background', 'lightsalmon')
+      .style('border', '0px')
+      .style('border-radius', '8px')
+      .style('box-shadow', '5px 5px 5px rgba(0, 0, 0, 0.1');
+  };
+
+  // tslint:disable-next-line:no-shadowed-variable
+  function mouseOut(ths, d: any) {
+    d3.selectAll('.c1_circle')
+      .style('stroke', ths.clrServicesNodeOutline)
+      .style('stroke-width', '3');
+    ths.divTooltip1.style('opacity', 0);
+
+    /* Chart interactivity: Revert highlighting in other chart */
+    d3.selectAll('.c2_circle')
+      .style('stroke', 'white')
+      .style('stroke-width', '1');
+    /* End chart interactivity */
+  };
+
+  function buildNodeTooltipHTML(d, verbose) {
       const headText = (d.data.id === null || d.data.id === '') ? d.data.description : d.data.description + '<hr>' + d.data.id;
 
       if (verbose) {
@@ -527,7 +537,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
           '</td> </tr> </tbody> </table> </div>';
       }
     }
-  }  /* End of updateChart1() */
+  }  /* End of updateChart1a() */
 
   /*
    * ## Agents Activity Bar Chart ##
@@ -555,6 +565,8 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     // const diameter = Math.min(width, height);
     // console.log('drawChart1b: w=' + width + ', h=' + height);
 
+    let barRects = null;
+
     // Room for Card Footer buttons?
     ths.isShowBtnsChart1 = false; // (width > ths.minWidthShowBtns) ? true : false;
 
@@ -564,6 +576,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     d3.select('#d3chart1').selectAll('*').remove();
     d3.select('#d3chart1_legend').selectAll('*').remove();
 
+    // Get the data and build the elements
     d3.json(fileJSON, function (error, data: any) {
       if (error) { throw error; }
 
@@ -597,21 +610,24 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       // const margin = this.svgMargin;
       const margin = { top: 20, right: 30, bottom: 45, left: 50 };
 
+      // Configure X scale
       const x = d3.scaleBand()
         .domain(data.map(function (d) { return d.date; }))
         .rangeRound([margin.left, width - margin.right])
         .padding(0.4);
 
+      // Configure Y scale
       const min: any = d3.min(series, stackMin);
       const max: any = d3.max(series, stackMax);
       const y = d3.scaleLinear()
         .domain([min, max])
         .rangeRound([height - margin.bottom, margin.top]);
 
+      // Configure Z scale (colors)
       const z = d3.scaleOrdinal(d3.schemeCategory20c);
 
       // Bars
-      ths.svg.append('g')
+      barRects = ths.svg.append('g')
         .selectAll('g')
         .data(series)
         .enter().append('g')
@@ -627,55 +643,15 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         })
         .attr('width', x.bandwidth)
         .attr('x', function (d: any) { return x(d.data.date); })
-        .attr('y', function (d) { return y(d[1]); })
-        .attr('height', function (d) { return y(d[0]) - y(d[1]); })
+        // .attr('y', function (d) { return y(d[1]); })
+        .attr('y', function (d) { return y(d[0]); })  // Start bar segment at bottom. Will transition to top.
+        // .attr('height', function (d) { return y(d[0]) - y(d[1]); })
+        .attr('height', 0)  // Start at 0 height. Will transition to actual height.
         .on('mouseover', function (d: any) {
-          d3.selectAll('.c1b_rect')
-            .style('opacity', function (o: any) {
-              return d.data.date === o.data.date && d[1] === o[1] ? 0.6 : 1;
-            });
-
           const pDatum: any = d3.select(this.parentNode).datum();
-          // console.log('Agent=' + agent + ', value=' + d.data[agent]);
-
-          /* Chart interactivity: Highlight matching agents in Chart2 - Bubble Chart */
-          const agent = pDatum.key;
-          d3.selectAll('.c2_circle')
-            .style('stroke', function (o: any) {
-              return agent === o.data.address ? ths.clrRemoteHighlight : 'white';
-            }).style('stroke-width', function (o: any) {
-              return agent === o.data.address ? ths.strokewidthHighlight : '1';
-            });
-          /* End chart interactivity */
-
-          ths.divTooltip2.style('opacity', .9);
-          ths.divTooltip2.html(
-            buildNodeTooltipHTML(d, pDatum, true))
-            .style('pointer-events', 'none')  // Else the hidden tooltip can eat mouseovers.
-            .style('left', (d3.event.pageX + 12) + 'px')
-            .style('top', (d3.event.pageY - 12) + 'px')
-            .style('position', 'absolute')
-            .style('text-align', 'center')
-            .attr('width', '60px')
-            .attr('height', '28px')
-            .style('padding', '6px')
-            .style('font', '12px sans-serif;')
-            .style('background', ths.clrTooltip)
-            .style('border', '0px')
-            .style('border-radius', '8px')
-            .style('box-shadow', '5px 5px 5px rgba(0, 0, 0, 0.1');
+          mouseOver(ths, d, pDatum);
         })
-        .on('mouseout', function (d: any) {
-          d3.selectAll('.c1b_rect')
-            .style('opacity', 1);
-          ths.divTooltip2.style('opacity', 0);
-
-          /* Chart interactivity: Revert highlighting in other chart */
-          d3.selectAll('.c2_circle')
-            .style('stroke', 'white')
-            .style('stroke-width', '1');
-          /* End chart interactivity */
-        })
+        .on('mouseout', (d) => { mouseOut(ths, d); });
 
       // X Axis
       ths.svg.append('g')
@@ -694,6 +670,13 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .style('user-select', 'none')
         .attr('transform', 'translate(' + margin.left + ',0)')
         .call(d3.axisLeft(y));
+
+      // Bar segment transition to make bar sections appear, ending with the correct height
+      barRects.transition()
+      // .delay(50)
+      .duration(ths.durationFadeActivityChart)
+      .attr('height', function (d: any) { return y(d[0]) - y(d[1]); })
+      .attr('y', function (d) { return y(d[1]); });
     });
 
     // Legend
@@ -711,16 +694,60 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     d3.select(self.frameElement).style('height', height + 'px');
 
     function stackMin(serie) {
-      return d3.min(serie, function (d) {
-        return d[0];
-      });
+      return d3.min(serie, function (d) { return d[0]; });
     }
 
     function stackMax(serie) {
-      return d3.max(serie, function (d) {
-        return d[1];
-      });
+      return d3.max(serie, function (d) { return d[1]; });
     }
+
+    // tslint:disable-next-line:no-shadowed-variable
+    function mouseOver(ths, d: any, pDatum) {
+      d3.selectAll('.c1b_rect')
+        .style('opacity', function (o: any) {
+          return d.data.date === o.data.date && d[1] === o[1] ? 0.6 : 1;
+        });
+
+      /* Chart interactivity: Highlight matching agents in Chart2 - Bubble Chart */
+      const agent = pDatum.key;
+      d3.selectAll('.c2_circle')
+        .style('stroke', function (o: any) {
+          return agent === o.data.address ? ths.clrRemoteHighlight : 'white';
+        }).style('stroke-width', function (o: any) {
+          return agent === o.data.address ? ths.strokewidthHighlight : '1';
+        });
+      /* End chart interactivity */
+
+      ths.divTooltip2.style('opacity', .9);
+      ths.divTooltip2.html(
+        buildNodeTooltipHTML(d, pDatum, true))
+        .style('pointer-events', 'none')  // Else the hidden tooltip can eat mouseovers.
+        .style('left', (d3.event.pageX + 12) + 'px')
+        .style('top', (d3.event.pageY - 12) + 'px')
+        .style('position', 'absolute')
+        .style('text-align', 'center')
+        .attr('width', '60px')
+        .attr('height', '28px')
+        .style('padding', '6px')
+        .style('font', '12px sans-serif;')
+        .style('background', ths.clrTooltip)
+        .style('border', '0px')
+        .style('border-radius', '8px')
+        .style('box-shadow', '5px 5px 5px rgba(0, 0, 0, 0.1');
+    };
+
+    // tslint:disable-next-line:no-shadowed-variable
+    function mouseOut(ths, d: any) {
+      d3.selectAll('.c1b_rect')
+        .style('opacity', 1);
+      ths.divTooltip2.style('opacity', 0);
+
+      /* Chart interactivity: Revert highlighting in other chart */
+      d3.selectAll('.c2_circle')
+        .style('stroke', 'white')
+        .style('stroke-width', '1');
+      /* End chart interactivity */
+    };
 
     function buildNodeTooltipHTML(d, datum, verbose) {
       const agent = datum.key;
@@ -753,6 +780,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     const height = document.getElementById('d3chart2_card_block').clientHeight;
     const marginFactor = 0.90;
     const diameter = Math.min(width, height);
+    let nodes = null, circles = null, labels = null;
     // console.log('drawChart2: w=' + width + ', h=' + height + ', d=' + diameter);
 
     // Room for Card Footer buttons?
@@ -789,6 +817,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       // .attr('height', diameter)
       .attr('class', 'bubble');
 
+    // Get the data and build the elements
     d3.json(fileJSON, function (error, data) {
       if (error) { throw error; }
 
@@ -797,95 +826,27 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .sort(function (a, b) { return b.value - a.value; });
 
       bubble(root);
-      const node = svg.selectAll('.c2_node')
+      nodes = svg.selectAll('.c2_node')
         .data(root.children)
         .enter().append('g')
         .attr('class', 'c2_node')
         .attr('transform', function (d: any) { return 'translate(' + d.x + ',' + d.y + ')'; });
 
-      node.append('circle')
+      circles = nodes.append('circle')
         .attr('class', 'c2_circle')
-        .attr('r', function (d: any) { return d.r; })
+        .attr('r', 0)  // Start at 0 radius. Will transition to actual radius.
+        .attr('cx',  function (d: any) { return d.cx; })
+        .attr('cy',  function (d: any) { return d.cy; })
         .style('fill', function (d: any) {
           // d3.select(this).attr('color-val', d.data.rating_avg.toString());
           const clr = d3sc.interpolateRdYlBu(d.data.rating_avg);
           // d.data.colorval = bubbleClr;
           return clr;
         })
-        .on('mouseover', function (d: any) {
-          d3.selectAll('.c2_circle')
-            .style('stroke', function (o: any) {
-              return d.data.address === o.data.address ? ths.clrHighlight : 'white';
-            }).style('stroke-width', function (o: any) {
-              return d.data.address === o.data.address ? ths.strokewidthHighlight : '1';
-            });
+        .on('mouseover', (d) => { mouseOver(ths, d); })
+        .on('mouseout', (d) => { mouseOut(ths, d); });
 
-          /* Chart interactivity: Highlight matching agents... */
-          if (ths.isServicesChart) {
-            // ...in Chart1 - Services Ontology Tree Chart
-            ths.agentBubbleChart = d.data.address;  // Work-around: const agentBubbleChart = d.data.address;
-            // console.log('agentBubbleChart (d.data.address)=', ths.agentBubbleChart);
-            const __this = ths;
-            d3.selectAll('.c1_circle').each(function (o: any, i) {
-              o.data.agents.forEach(function (p: any) {
-                d3.selectAll('.c1_circle').
-                  style('stroke', function (q: any) {
-                    // const match = q.data.agents.includes(ths.agentBubbleChart);  // Doesn't work in IE.
-                    const match = ths.contains(q.data.agents, ths.agentBubbleChart);
-                    return match ? ths.clrRemoteHighlight : ths.clrServicesNodeOutline;
-                  });
-                  d3.selectAll('.c1_circle').
-                  style('stroke-width', function (q: any) {
-                    // const match = q.data.agents.includes(ths.agentBubbleChart);  // Doesn't work in IE.
-                    const match = ths.contains(q.data.agents, ths.agentBubbleChart);
-                    return match ? ths.strokewidthHighlight : '3';
-                  });
-              });
-            });
-          } else {
-            // ...in Chart1b - Activities Stacked Bar Chart
-            const agent = d.data.address;
-            const agentClass = '.A' + agent;
-            d3.selectAll(agentClass).style('opacity', 0.2);
-          }
-          /* End chart interactivity */
-
-          ths.divTooltip2.style('opacity', 0.9);
-          ths.divTooltip2.attr('pagex', d3.event.pageX).attr('pagey', d3.event.pageY);  // Workaround.
-          ths.divTooltip2.html(
-            buildNodeTooltipHTML(d, true))
-            .style('pointer-events', 'none')  // Else the hidden tooltip can eat mouseovers.
-            .style('left', (d3.event.pageX + 12) + 'px')
-            .style('top', (d3.event.pageY - 12) + 'px')
-            .style('position', 'absolute')
-            .style('text-align', 'center')
-            .attr('width', '60px')
-            .attr('height', '28px')
-            .style('padding', '6px')
-            .style('font', '12px sans-serif;')
-            .style('background', ths.clrTooltip)
-            .style('border', '0px')
-            .style('border-radius', '8px')
-            .style('box-shadow', '5px 5px 5px rgba(0, 0, 0, 0.1');
-        })
-        .on('mouseout', function (d: any) {
-          /* Chart interactivity: Revert highlighting in other chart */
-          if (ths.isServicesChart) {
-            d3.selectAll('.c1_circle')
-            .style('stroke', ths.clrServicesNodeOutline)
-            .style('stroke-width', '3')
-          } else {
-            d3.selectAll('.c1b_rect').style('opacity', 1)
-          }
-          /* End chart interactivity */
-
-          d3.selectAll('.c2_circle')
-            .style('stroke', 'white')
-            .style('stroke-width', '1');
-          ths.divTooltip2.style('opacity', 0);
-        });
-
-      node.append('text')
+      labels = nodes.append('text')
         .style('font', 'ariel')
         .style('font-weight', 'bold')
         // .style('fill', 'white')
@@ -893,11 +854,24 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .style('text-anchor', 'middle')
         .style('pointer-events', 'none')
         .style('user-select', 'none')
+        .style('opacity', '0')  // Start hidden. Will transition to visible.
         .text(function (d: any) {
           if (d.r < 14) { return ''; }
           const id = d.data.address.substring(0, d.r / 7);
           return id.length < d.data.address.length ? id + '...' : id;
         });
+
+      // Radius transition to make bubbles appear, ending with the correct radius
+      circles.transition()
+        .delay(50)
+        .duration(ths.durationFadeBubbleChart)
+        .attr('r', function (d: any) { return d.r; })
+
+      // Opacity transition to make bubble labels appear, ending with full visibility
+      labels.transition()
+        .delay(Math.max(ths.durationFadeBubbleChart - 500, 0))
+        .duration(500)
+        .style('opacity', '1');
     });
 
     // Legend
@@ -912,6 +886,82 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .call(d3cb.colorbarH(clrScale, widthLegend, heightLegend).tickValues([0, 0.5, 1]));
 
     d3.select(self.frameElement).style('height', diameter + 'px');
+
+    // tslint:disable-next-line:no-shadowed-variable
+    function mouseOver(ths, d: any) {
+      d3.selectAll('.c2_circle')
+        .style('stroke', function (o: any) {
+          return d.data.address === o.data.address ? ths.clrHighlight : 'white';
+        }).style('stroke-width', function (o: any) {
+          return d.data.address === o.data.address ? ths.strokewidthHighlight : '1';
+        });
+
+      /* Chart interactivity: Highlight matching agents... */
+      if (ths.isServicesChart) {
+        // ...in Chart1 - Services Ontology Tree Chart
+        ths.agentBubbleChart = d.data.address;  // Work-around: const agentBubbleChart = d.data.address;
+        // console.log('agentBubbleChart (d.data.address)=', ths.agentBubbleChart);
+        const __this = ths;
+        d3.selectAll('.c1_circle').each(function (o: any, i) {
+          o.data.agents.forEach(function (p: any) {
+            d3.selectAll('.c1_circle').
+              style('stroke', function (q: any) {
+                // const match = q.data.agents.includes(ths.agentBubbleChart);  // Doesn't work in IE.
+                const match = ths.contains(q.data.agents, ths.agentBubbleChart);
+                return match ? ths.clrRemoteHighlight : ths.clrServicesNodeOutline;
+              });
+              d3.selectAll('.c1_circle').
+              style('stroke-width', function (q: any) {
+                // const match = q.data.agents.includes(ths.agentBubbleChart);  // Doesn't work in IE.
+                const match = ths.contains(q.data.agents, ths.agentBubbleChart);
+                return match ? ths.strokewidthHighlight : '3';
+              });
+          });
+        });
+      } else {
+        // ...in Chart1b - Activities Stacked Bar Chart
+        const agent = d.data.address;
+        const agentClass = '.A' + agent;
+        d3.selectAll(agentClass).style('opacity', 0.2);
+      }
+      /* End chart interactivity */
+
+      ths.divTooltip2.style('opacity', 0.9);
+      ths.divTooltip2.attr('pagex', d3.event.pageX).attr('pagey', d3.event.pageY);  // Workaround.
+      ths.divTooltip2.html(
+        buildNodeTooltipHTML(d, true))
+        .style('pointer-events', 'none')  // Else the hidden tooltip can eat mouseovers.
+        .style('left', (d3.event.pageX + 12) + 'px')
+        .style('top', (d3.event.pageY - 12) + 'px')
+        .style('position', 'absolute')
+        .style('text-align', 'center')
+        .attr('width', '60px')
+        .attr('height', '28px')
+        .style('padding', '6px')
+        .style('font', '12px sans-serif;')
+        .style('background', ths.clrTooltip)
+        .style('border', '0px')
+        .style('border-radius', '8px')
+        .style('box-shadow', '5px 5px 5px rgba(0, 0, 0, 0.1');
+    };
+
+    // tslint:disable-next-line:no-shadowed-variable
+    function mouseOut(ths, d: any) {
+      /* Chart interactivity: Revert highlighting in other chart */
+      if (ths.isServicesChart) {
+        d3.selectAll('.c1_circle')
+        .style('stroke', ths.clrServicesNodeOutline)
+        .style('stroke-width', '3')
+      } else {
+        d3.selectAll('.c1b_rect').style('opacity', 1)
+      }
+      /* End chart interactivity */
+
+      d3.selectAll('.c2_circle')
+        .style('stroke', 'white')
+        .style('stroke-width', '1');
+      ths.divTooltip2.style('opacity', 0);
+    };
 
     function buildNodeTooltipHTML(d, verbose) {
       const headText = (d.data.description === '') ? d.data.address : d.data.description + '<hr>' + d.data.address;
@@ -940,18 +990,14 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     function classes(root) {
       const classes = [];
 
-      function recurse(name, node) {
-        // if (node.children) {
-        if (node.agents) {
-          // node.children.forEach(function (child) { recurse(node.name, child); });
-          node.agents.forEach(function (child) { recurse(node.agents, child); });
-          // } else { classes.push({ packageName: name, className: node.id, value: node.size, descriptionName: node.description,
-          //   wealthName: node.wealth }); }
+      function recurse(name, nde) {
+        if (nde.agents) {
+          nde.agents.forEach(function (child) { recurse(nde.agents, child); });
         } else {
           classes.push({
-            value: node.wealth, address: node.address, description: node.description, wealth: node.wealth,
-            rating_avg: node.rating.average, rating_cnt: node.rating.count, services: node.services,
-            exec_contracts: node.executedContracts, pend_contracts: node.pendingContracts
+            value: nde.wealth, address: nde.address, description: nde.description, wealth: nde.wealth,
+            rating_avg: nde.rating.average, rating_cnt: nde.rating.count, services: nde.services,
+            exec_contracts: nde.executedContracts, pend_contracts: nde.pendingContracts
           });
         }
       }
