@@ -16,20 +16,17 @@
                     </ul>
                 </div>
                 <div class="card-block" id=d3chart1_card_block>
-                    <!-- <svg *ngIf="isServicesChart" class="d3svgchart" id="d3chart1" height="540px"></svg>
-                    <svg *ngIf="!isServicesChart" class="d3svgchart" id="d3chart1b" height="540px"></svg> -->
                     <svg class="d3svgchart" id="d3chart1" height="540px"></svg>
-                    <!-- <svg class="d3svgchart" id="d3chart1b" height="540px" style="opacity:0"></svg> -->
                 </div>
                 <div class="card-footer">
                     <div *ngIf="isShowBtnsChart1">
-                        <button class="btn btn-info btn-sm" style="float:left" data-content="Collapse All" (click)="collapse_all()">
+                        <button type="button" class="btn btn-info btn-sm" style="float:left" (click)="collapse_all()" ngbTooltip="Collapse All">
                             <span class="fa fa-compress fa-lg"></span>
                         </button>
                     </div>
                     <svg class="d3svgchart_legend" id="d3chart1_legend" width="165px"></svg>
                     <div *ngIf="isShowBtnsChart1">
-                        <button class="btn btn-info btn-sm" style="float:right" (click)="expand_all()">
+                        <button type="button" class="btn btn-info btn-sm" style="float:right" (click)="expand_all()" ngbTooltip="Expand All">
                             <span class="fa fa-expand fa-lg"></span>
                         </button>
                     </div>
@@ -46,13 +43,13 @@
                 </div>
                 <div class="card-footer">
                     <div *ngIf="isShowBtnsChart2">
-                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="remove_agent()">
+                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="remove_agent()" ngbTooltip="Remove Agent">
                             <span class="fa fa-user-times fa-lg"></span>
                         </button>
                     </div>
                     <svg class="d3svgchart_legend" id="d3chart2_legend" width="165px"></svg>
                     <div *ngIf="isShowBtnsChart2">
-                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="hire_agent()">
+                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="hire_agent()" ngbTooltip="Hire Agent">
                             <span class="fa fa-user-plus fa-lg"></span>
                         </button>
                     </div>

@@ -1,52 +1,37 @@
-{
-  "id": "",
-  "description": "Services",
-  "agents": [
-  ],
-  "services": [
+[
   {
     "id": "f8fc0e98-b78a-4d3a-8d7f-344700dc0926",
     "description": "Video Analysis",
     "agents": [
-      "0x64b359f9b9c2762e55c01829bc5141130f563d3a",
-      "0x72b94471e324456746af2a6c998d87224e1fe30e",
-      "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"      
+      "0x520a59f9b9c2762e55c01829bc5141130f563d3a",
+      "0xab400471e324456746af2a6c998d87224e1fe30e",
+      "0x6fa359f9b9c2762e55c01829bc5141130f563d3a",
+      "0x0a3d59f9b9c2762e55c01829bc5141130f563d3a",
+      "0xd40b59f9b9c2762e55c01829bc5141130f563d3a",
+      "0x72c4f12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x4f6329f9b9c2762e55c01829bc5141130f563d3a",
+      "0x38d5012edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x72d359f9b9c2762e55c01829bc5141130f563d3a",
+      "0x125c59f9b9c2762e55c01829bc5141130f563d3a",
+      "0x6d7859f9b9c2762e55c01829bc5141130f563d3a",
+      "0x93ea59f9b9c2762e55c01829bc5141130f563d3a"
     ],
     "services": [
       {
         "id": "450d54bc-17d1-42d4-a894-656a97ded304",
-        "description": "Face Identification",
-        "agents": [
-          "0xa5f80471e324456746af2a6c998d87224e1fe30e",
-          "0x93d5a12edb3d5e8e72ca1e74da8f1a34865c25ed",
-          "0x47b91471e324456746af2a6c998d87224e1fe30e"
-        ]
+        "description": "Face Identification"
       },
       {
         "id": "92cc1211-1926-4171-a2c3-3d3fbf9201ad",
-        "description": "Facial Emotion Recognition",
-        "agents": [
-          "0x16b6012edb3d5e8e72ca1e74da8f1a34865c25ed",
-          "0xde7849f9b9c2762e55c01829bc5141130f563d3a"
-        ]
+        "description": "Facial Emotion Recognition"
       },
       {
         "id": "b8635774-1c7c-4922-87b3-8938408a8588",
-        "description": "Scene Description",
-        "agents": [
-          "0x93d5a12edb3d5e8e72ca1e74da8f1a34865c25ed",
-          "0x47b91471e324456746af2a6c998d87224e1fe30e",
-          "0x16b6012edb3d5e8e72ca1e74da8f1a34865c25ed",
-          "0xde7849f9b9c2762e55c01829bc5141130f563d3a",
-          "0x2a540431e324456746af2a6c998d87224e1fe30e"
-         ]
+        "description": "Scene Description"
       },
       {
         "id": "a254d5a9-a6cc-40ae-8b89-0f53e2237ccd",
-        "description": "Visual Salience Detection",
-        "agents": [
-          "0x64b359f9b9c2762e55c01829bc5141130f563d3a"
-        ]
+        "description": "Visual Salience Detection"
       }
     ]
   },
@@ -54,48 +39,36 @@
     "id": "017339cc-c1cf-4340-9637-5e0612851d31",
     "description": "Image Analysis",
     "agents": [
-      "0x2a6359f9b9c2762e55c01829bc5141130f563d3a"
+      "0x64b359f9b9c2762e55c01829bc5141130f563d3a",
+      "0x90a349f9b9c2762e55c01829bc5141130f563d3a",
+      "0x1e784471e324456746af2a6c998d87224e1fe30e",
+      "0x9a4549f9b9c2762e55c01829bc5141130f563d3a",
+      "0x48f349f9b9c2762e55c01829bc5141130f563d3a",
+      "0x0d184471e324456746af2a6c998d87224e1fe30e",
+      "0x53d3d12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x2a6359f9b9c2762e55c01829bc5141130f563d3a",
+      "0x88e40471e324456746af2a6c998d87224e1fe30e"
     ],
     "services": [
       {
         "id": "0101290e-b13d-4ad2-8404-20c9762854cd",
-        "description": "Face Identification",
-        "agents": [
-          "0x2a6359f9b9c2762e55c01829bc5141130f563d3a",
-          "0x47b91471e324456746af2a6c998d87224e1fe30e",
-          "0x47b91471e324456746af2a6c998d87224e1fe30e"
-          ]
-        },
+        "description": "Face Identification"
+      },
       {
         "id": "396cfeda-ae9f-45eb-85e3-1a15b449c343",
-        "description": "Facial Emotion Recognition",
-        "agents": [
-          ]
-        },
+        "description": "Facial Emotion Recognition"
+      },
       {
         "id": "720c0512-033a-408f-ba03-7462e70efa39",
-        "description": "Object Recognition",
-        "agents": [
-          "0x2a6359f9b9c2762e55c01829bc5141130f563d3a",
-          "0x47b91471e324456746af2a6c998d87224e1fe30e",
-          "0x47b91471e324456746af2a6c998d87224e1fe30e",
-          "0x47b91471e324456746af2a6c998d87224e1fe30e"
-          ]
+        "description": "Object Recognition"
       },
       {
         "id": "3d80edcb-b919-4b7b-ac4f-fdac958d6c50",
-        "description": "Visual Salience Detection",
-        "agents": [
-          "0x2a6359f9b9c2762e55c01829bc5141130f563d3a"
-        ]
+        "description": "Visual Salience Detection"
       },
       {
         "id": "c9c9788d-3856-4a0b-9d10-766335f5af28",
-        "description": "Image Summarization",
-        "agents": [
-          "0x2a6359f9b9c2762e55c01829bc5141130f563d3a",
-          "0x64b359f9b9c2762e55c01829bc5141130f563d3a"
-        ]
+        "description": "Image Summarization"
       }
     ]
   },
@@ -103,28 +76,25 @@
     "id": "1d7cbde5-32b2-49d0-94a2-f9cea3c1b8c9",    
     "description": "Audio Analysis",
     "agents": [
-      ],
+      "0x04a3012edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x57e359f9b9c2762e55c01829bc5141130f563d3a",
+      "0x40c10471e324456746af2a6c998d87224e1fe30e",
+      "0x2ea2a12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x5a4359f9b9c2762e55c01829bc5141130f563d3a",
+      "0xf4a24971e324456746af2a6c998d87224e1fe30e"
+    ],
     "services": [
       {
         "id": "71d46d5a-d8b2-42d4-be20-30a3a76902b5",
-        "description": "Voice Identification",
-        "agents": [
-          ]
+        "description": "Voice Identification"
       },
       {
         "id": "713368fd-df54-4e1d-ace2-cde5de127246",
-        "description": "Voice Emotion Recognition",
-        "agents": [
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Voice Emotion Recognition"
       },
       {
         "id": "c652fa0d-2c99-493d-9c78-959eab53317c",
-        "description": "Speech to Text Conversion",
-        "agents": [
-          "0x64b359f9b9c2762e55c01829bc5141130f563d3a",
-          "0xa5f80471e324456746af2a6c998d87224e1fe30e"
-          ]
+        "description": "Speech to Text Conversion"
       }
     ]
   },
@@ -132,87 +102,57 @@
     "id": "1e2baaed-165e-488d-88bc-3f08ecd01180",
     "description": "Natural Language Processing",
     "agents": [
-      "0xa5f80471e324456746af2a6c998d87224e1fe30e",
-      "0x72b94471e324456746af2a6c998d87224e1fe30e",
-      "0x72b94471e324456746af2a6c998d87224e1fe30e",
-      "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
+      "0xd50e4971e324456746af2a6c998d87224e1fe30e",
+      "0x66a9012edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x83c6f12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x54e802471e324456746af2a6c998d87224e1fe30e",
+      "0x33f0d12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x78b48471e324456746af2a6c998d87224e1fe30e",
+      "0x74bda12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x52d60471e324456746af2a6c998d87224e1fe30e",
+      "0xd40b0471e324456746af2a6c998d87224e1fe30e",
+      "0x64a0b12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x44d04471e324456746af2a6c998d87224e1fe30e",
+      "0x0c560431e324456746af2a6c998d87224e1fe30e",
+      "0x15d7d12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x1e4359f9b9c2762e55c01829bc5141130f563d3a",
+      "0xd9e40471e324456746af2a6c998d87224e1fe30e",
+      "0x1d79012edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x2d6a49f9b9c2762e55c01829bc5141130f563d3a",
+      "0x68e122471e324456746af2a6c998d87224e1fe30e"
     ],
     "services": [
       {
         "id": "8407b416-5312-4c0c-80d2-883d1910098c",
-        "description": "Syntax Parsing",
-        "agents": [
-          "0x64b359f9b9c2762e55c01829bc5141130f563d3a",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Syntax Parsing"
       },
       {
         "id": "b854b6a5-ac4f-4734-b8c6-385b69169622",
-        "description": "Semantic Relation Extraction",
-        "agents": [
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Semantic Relation Extraction"
       },
       {
         "id": "ee75003a-4b2d-413e-bce7-e44d1977dfec",
-        "description": "Logical Relation Extraction",
-        "agents": [
-          "0x47b91471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Logical Relation Extraction"
       },
       {
         "id": "cc4ba8cf-4bd6-4f53-a614-568cb58402c8",
-        "description": "Biological Relation Extraction",
-        "agents": [
-          "0xa5f80471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Biological Relation Extraction"
       },
       {
         "id": "2f18e416-2461-4667-8ae3-9b668a6781e0",
-        "description": "Document Summarization",
-        "agents": [
-          "0x47b91471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Document Summarization"
       },
       {
         "id": "8163dedb-ea01-4f80-8b3f-0ea7dd511e67",
-        "description": "Text Summarization",
-        "agents": [
-          "0x47b91471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Text Summarization"
       },
       {
         "id": "dfc92b80-fd27-4b7c-beae-943cec1318aa",
-        "description": "Named Entity Recognition",
-        "agents": [
-          ]
+        "description": "Named Entity Recognition"
       },
       {
         "id": "84c4c596-9030-4217-b4c2-a109c29cea19",
-        "description": "Biological Named Entity Recognition",
-        "agents": [
-          "0x64b359f9b9c2762e55c01829bc5141130f563d3a",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Biological Named Entity Recognition"
       }
     ]
   },
@@ -220,45 +160,26 @@
     "id": "1b89a609-63b0-419d-9af4-f8deb6dee5f2",
     "description": "Dialogue",
     "agents": [
-      "0xa5f80471e324456746af2a6c998d87224e1fe30e",
+      "0x5de949f9b9c2762e55c01829bc5141130f563d3a",
+      "0x3e8cf471e324456746af2a6c998d87224e1fe30e",
+      "0x72b94471e324456746af2a6c998d87224e1fe30e",
       "0x9fd1d12edb3d5e8e72ca1e74da8f1a34865c25ed",
-      "0x72b94471e324456746af2a6c998d87224e1fe30e",
-      "0x72b94471e324456746af2a6c998d87224e1fe30e",
-      "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-      ],
+      "0x84a80471e324456746af2a6c998d87224e1fe30e",
+      "0x57d6f12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x8bf70471e324456746af2a6c998d87224e1fe30e"
+    ],
     "services": [
       {
         "id": "2e7315fe-c918-441b-aa74-9155514fcd87",
-        "description": "Loving AI Chatbot",
-        "agents": [
-          "0x9fd1d12edb3d5e8e72ca1e74da8f1a34865c25ed",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Loving AI Chatbot"
       },
       {
         "id": "dabbe737-1d0d-4b18-9ed6-33cdc9309a12",
-        "description": "Sophia Chatbot",
-        "agents": [
-          "0x9fd1d12edb3d5e8e72ca1e74da8f1a34865c25ed",
-          "0xa5f80471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Sophia Chatbot"
       },
       {
         "id": "adbf27b8-15cb-4ccd-b56d-4819cef8dfbe",
-        "description": "Ghost Chatbot",
-        "agents": [
-          "0x9fd1d12edb3d5e8e72ca1e74da8f1a34865c25ed",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Ghost Chatbot"
       }
     ]
   },
@@ -266,28 +187,26 @@
     "id": "69a4af57-2daf-4669-99d3-add23ebecc23",
     "description": "Biological Data Analysis",
     "agents": [
-      "0x47b91471e324456746af2a6c998d87224e1fe30e",
-      "0x47b91471e324456746af2a6c998d87224e1fe30e"      
+      "0xa8d7d12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x9b8359f9b9c2762e55c01829bc5141130f563d3a",
+      "0x17cd012edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x936a49f9b9c2762e55c01829bc5141130f563d3a",
+      "0x3f081471e324456746af2a6c998d87224e1fe30e",
+      "0x0fa9012edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x3e8349f9b9c2762e55c01829bc5141130f563d3a",
+      "0x25a3d12edb3d5e8e72ca1e74da8f1a34865c25ed",
+      "0x857c59f9b9c2762e55c01829bc5141130f563d3a",
+      "0x0a654471e324456746af2a6c998d87224e1fe30e"
     ],
     "services": [
       {
         "id": "6f2a2917-c615-4ac6-81c7-0f60f8d3d584",
-        "description": "Gene Expression Supervised Learning",
-        "agents": [
-          "0x47b91471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Gene Expression Supervised Learning"
       },
       {
         "id": "edad3ea4-bc73-4a77-af0b-f9bdf92d7bfe",
-        "description": "Longevity Prediction",
-        "agents": [
-          "0x47b91471e324456746af2a6c998d87224e1fe30e",
-          "0x72b94471e324456746af2a6c998d87224e1fe30e",
-          "0x00a3d12edb3d5e8e72ca1e74da8f1a34865c25ed"    
-          ]
+        "description": "Longevity Prediction"
       }
     ]
   }
-  ]
-}
+]
