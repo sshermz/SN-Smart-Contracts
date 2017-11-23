@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import { ViewEncapsulation } from '@angular/core';
 import { routerTransition } from '../../router.animations';
+import { interpolateRdYlBu } from 'd3-scale-chromatic';
+import { colorbarH } from 'd3-colorbar';
 import * as d3 from 'd3';
-import * as d3sc from 'd3-scale-chromatic';
-import * as d3cb from 'd3-colorbar';
 
 /*
  * ## Class ChartsComponent ##
@@ -41,9 +41,10 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   private agentCoveredCnt = 15;
   private clrServicesNodeOutline = 'steelblue';
   private clrHighlight = 'lightsalmon';
-  private clrRemoteHighlight = 'red';  // 'tomato';
+  private clrRemoteHighlight = 'lightsalmon';
   private strokewidthHighlight = '5';
   private clrTooltip = 'lightsalmon';
+  private isFirefox = navigator.userAgent.indexOf('Firefox') !== -1;
 
   /*
   * ## Static Functions ##
@@ -120,19 +121,19 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.fadeCharts(true);
 
     // Handle Resize of Charts
-    const self = this;
+    const _this = this;
     window.onresize = function (evt) {
-      if (window.innerWidth === self.lastWindowWidth) { return; }  // Ignore height changes.
-      self.lastWindowWidth = window.innerWidth;  // Save last width.
+      if (window.innerWidth === _this.lastWindowWidth) { return; }  // Ignore height changes.
+      _this.lastWindowWidth = window.innerWidth;  // Save last width.
 
-      self.fadeCharts(false);
-      if (self.isServicesChart) {
-        self.drawChart1a(self);
+      _this.fadeCharts(false);
+      if (_this.isServicesChart) {
+        _this.drawChart1a(_this);
       } else {
-        self.drawChart1b(self);
+        _this.drawChart1b(_this);
       }
-      self.drawChart2(self);
-      self.fadeCharts(true);
+      _this.drawChart2(_this);
+      _this.fadeCharts(true);
     }
   }
 
@@ -223,10 +224,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   /*
-   * ## Ontology Tree Chart ##
-   *
-   * Based on Collapsible Tree reading from JSON file:
-   *   https://bl.ocks.org/mbostock/4339083, https://bl.ocks.org/d3noob/43a860bc0024792f8803bba8ca0d5ecd
+   * ## Services Ontology Tree Chart ##
    */
 
   /*
@@ -259,20 +257,8 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const fileJSON = './../../../assets/ontologies.json';
 
-    // Clear out everything from the SVG element for this chart
-    d3.select('#d3chart1').selectAll('*').remove();
-    d3.select('#d3chart1_legend').selectAll('*').remove();
-
     // declares a tree layout and assigns the size
     this.treemap = d3.tree().size([height * marginFactor, width * marginFactor]);
-
-    // Set SVG client area size and position
-    this.svg = d3.select('#d3chart1')
-      .attr('width', width - (this.svgMargin.right + this.svgMargin.left))
-      .attr('height', height - (this.svgMargin.top + this.svgMargin.bottom))
-      .append('g')
-      .attr('class', 'c1a_tree')
-      .attr('transform', 'translate(' + this.svgMargin.left + ',' + this.svgMargin.top + ')')
 
     // Get the data and build the elements
     d3.json(fileJSON, function (error, data: any) {
@@ -295,21 +281,34 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       // Collapse after 2nd level
       ths.root.children.forEach(ChartsComponent.collapse);
 
+      // Clear out everything from the SVG element for this chart
+      d3.select('#d3chart1').selectAll('*').remove();
+      d3.select('#d3chart1_legend').selectAll('*').remove();
+
+      // Set SVG client area size and position
+      ths.svg = d3.select('#d3chart1')
+        .attr('width', width - (ths.svgMargin.right + ths.svgMargin.left))
+        .attr('height', height - (ths.svgMargin.top + ths.svgMargin.bottom))
+        .append('g')
+        .attr('class', 'c1a_tree')
+        .attr('transform', 'translate(' + ths.svgMargin.left + ',' + ths.svgMargin.top + ')')
+
+      // Legend
+      const xLegend = 8, yLegend = 20, widthLegend = 145, heightLegend = 20;
+      const svgLegend = d3.select('#d3chart1_legend');
+      svgLegend.append('text').style('user-select', 'none').attr('x', xLegend).attr('y', yLegend - 6).
+        text('Agent Coverage');
+      const clrScale = d3.scaleSequential(interpolateRdYlBu).domain([0, ths.agentCoveredCnt]);
+      const clrBar = svgLegend.append('g').style('user-select', 'none')
+        .attr('transform', 'translate(' + xLegend + ',' + yLegend + ')')
+        .call(colorbarH(clrScale, widthLegend, heightLegend).tickValues([0, ths.agentCoveredCnt / 2, ths.agentCoveredCnt]));
+
+      d3.select(self.frameElement).style('height', height + 'px');
+
       ths.updateChart1a(ths, ths.root);
     });
 
-    // Legend
-    const xLegend = 8, yLegend = 20, widthLegend = 145, heightLegend = 20;
-    const svgLegend = d3.select('#d3chart1_legend');
-    svgLegend.append('text').style('user-select', 'none').attr('x', xLegend).attr('y', yLegend - 6).
-      text('Agent Coverage');
-    const clrScale = d3.scaleSequential(d3sc.interpolateRdYlBu).domain([0, ths.agentCoveredCnt]);
-    const clrBar = svgLegend.append('g').style('user-select', 'none')
-      .attr('transform', 'translate(' + xLegend + ',' + yLegend + ')')
-      .call(d3cb.colorbarH(clrScale, widthLegend, heightLegend).tickValues([0, ths.agentCoveredCnt / 2, ths.agentCoveredCnt]));
-
-    d3.select(self.frameElement).style('height', height + 'px');
-  }  /* End drawChart1 */
+  }  /* End drawChart1a */
 
   /*
    * updateChart1a()
@@ -356,6 +355,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .attr('dy', '.35em')
       .attr('x', function (d) { return d.children || d._children ? -18 : 18; })
       .attr('text-anchor', function (d) { return d.children || d._children ? 'end' : 'start'; })
+      .style('font-size', '14px')
       .style('stroke-width', ths.strokewidthHighlight)
       .style('stroke', '#fff')
       .text(function (d: any) {
@@ -374,6 +374,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .attr('dy', '.35em')
       .attr('x', function (d) { return d.children || d._children ? -18 : 18; })
       .attr('text-anchor', function (d) { return d.children || d._children ? 'end' : 'start'; })
+      .style('font-size', '14px')
       .text(function (d: any) {
         // const text = d.data.id.substring(0, 8);
         // return text.length < d.data.id.length ? text + '...' : text;
@@ -436,7 +437,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
           if (d.depth === 1) { agents = d.data.agents;
           } else { if (d.depth === 2) { agents = d.parent.data.agents; } }
           const scale = d3.scaleLinear().domain([0, ths.agentCoveredCnt]).range([0, 1]);
-          const clr = d3sc.interpolateRdYlBu(scale(agents ? agents.length : 0));
+          const clr = interpolateRdYlBu(scale(agents ? agents.length : 0));
           return clr;
         }
       })
@@ -571,9 +572,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   }  /* End of updateChart1a() */
 
   /*
-   * ## Agents Activity Bar Chart ##
-   *
-   * Based on Stacked Bar Charts w/time scale reading from JSON file: http://bl.ocks.org/anupsavvy/9513382
+   * ## Agents Activity Stacked Bar Chart ##
    */
 
   /*
@@ -593,15 +592,11 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /*
    * drawChart1b()
-   *
-   * Started with this Stacked Bar https://bl.ocks.org/mbostock/b5935342c6d21928111928401e2c8608
-   *
    */
   private drawChart1b(ths) {
     const marginFactor = 0.85;
     const width = document.getElementById('d3chart1_card_block').clientWidth * marginFactor;
     const height = document.getElementById('d3chart1_card_block').clientHeight * marginFactor;
-    // const diameter = Math.min(width, height);
     // console.log('drawChart1b: w=' + width + ', h=' + height);
 
     let barRects = null;
@@ -610,10 +605,6 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     ths.isShowBtnsChart1 = false; // (width > ths.minWidthShowBtns) ? true : false;
 
     const fileJSON = './../../../assets/activity.executed.json';
-
-    // Clear out everything from the SVG element for this chart
-    d3.select('#d3chart1').selectAll('*').remove();
-    d3.select('#d3chart1_legend').selectAll('*').remove();
 
     // Get the data and build the elements
     d3.json(fileJSON, function (error, data: any) {
@@ -637,13 +628,14 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .keys(keys)
         (data);
 
+      // Clear out everything from the SVG element for this chart
+      d3.select('#d3chart1').selectAll('*').remove();
+      d3.select('#d3chart1_legend').selectAll('*').remove();
+
       ths.svg = d3.select('#d3chart1')
-        // .attr('width', width - (this.svgMargin.right + this.svgMargin.left))
-        // .attr('height', height - (this.svgMargin.top + this.svgMargin.bottom))
         .attr('width', width)
         .attr('height', height)
         .attr('class', 'stack')
-        // .attr('transform', 'translate(' + this.svgMargin.left + ',' + this.svgMargin.top + ')')
         .attr('transform', 'translate(' + ths.svgMargin.left + ',' + ths.svgMargin.top + ')')
 
       // const margin = this.svgMargin;
@@ -674,23 +666,40 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .selectAll('rect')
         .data(function (d) { return d; })
         .enter().append('rect')
-        // .attr('class', 'c1b_rect')
-        .attr('class', function (d) {
-          const pDatum: any = d3.select(this.parentNode).datum();
-          const classnames = 'c1b_rect' + ' A' + pDatum.key;  // Classnames can't start with a digit.
-          return classnames;
-        })
+        .attr('class', 'c1b_rect')
         .attr('width', x.bandwidth)
         .attr('x', function (d: any) { return x(d.data.date); })
-        // .attr('y', function (d) { return y(d[1]); })
         .attr('y', function (d) { return y(d[0]); })  // Start bar segment at bottom. Will transition to top.
-        // .attr('height', function (d) { return y(d[0]) - y(d[1]); })
         .attr('height', 0)  // Start at 0 height. Will transition to actual height.
         .on('mouseover', function (d: any) {
           const pDatum: any = d3.select(this.parentNode).datum();
           mouseOver(ths, d, pDatum);
         })
-        .on('mouseout', (d) => { mouseOut(ths, d); });
+        .on('mouseout', (d) => { mouseOut(ths, d); })
+
+      // Bar selection rects
+      ths.svg.append('g')
+        .selectAll('g')
+        .data(series)
+        .enter().append('g')
+        .attr('fill', function (d) { return z(d.key); })
+        .selectAll('rect')
+        .data(function (d) { return d; })
+        .enter().append('rect')
+        .attr('class', function (d) {
+          // Include agent id as secondary classname to enable interchart joins
+          const pDatum: any = d3.select(this.parentNode).datum();
+          const classnames = 'c1b_selectionrect' + ' A' + pDatum.key;  // Classnames can't start with a digit.
+          return classnames;
+        })
+        .style('pointer-events', 'none')  // Don't eat mouseovers.
+        .attr('width', x.bandwidth)
+        .attr('x', function (d: any) { return x(d.data.date); })
+        .attr('y', function (d) { return y(d[1]); })
+        .attr('height', function (d) { return y(d[0]) - y(d[1]); })
+        .style('opacity', 0)
+        .style('stroke', ths.clrHighlight)
+        .style('stroke-width', ths.strokewidthHighlight);
 
       // X Axis
       ths.svg.append('g')
@@ -716,17 +725,17 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .duration(ths.durationFadeActivityChart)
       .attr('height', function (d: any) { return y(d[0]) - y(d[1]); })
       .attr('y', function (d) { return y(d[1]); });
+
+      // Legend
+      const xLegend = 10, yLegend = 30, widthLegend = 150, heightLegend = 20;
+      const svgLegend = d3.select('#d3chart1_legend');
+      svgLegend.append('text').attr('x', xLegend).attr('y', yLegend - 6).text('Executed Contracts')
+        .style('user-select', 'none');
+      svgLegend.append('text').attr('x', xLegend + 35).attr('y', yLegend + 12).text('by Agent')
+        .style('user-select', 'none');
+
+      d3.select(self.frameElement).style('height', height + 'px');
     });
-
-    // Legend
-    const xLegend = 10, yLegend = 30, widthLegend = 150, heightLegend = 20;
-    const svgLegend = d3.select('#d3chart1_legend');
-    svgLegend.append('text').attr('x', xLegend).attr('y', yLegend - 6).text('Executed Contracts')
-      .style('user-select', 'none');
-    svgLegend.append('text').attr('x', xLegend + 35).attr('y', yLegend + 12).text('by Agent')
-      .style('user-select', 'none');
-
-    d3.select(self.frameElement).style('height', height + 'px');
 
     function stackMin(serie) {
       return d3.min(serie, function (d) { return d[0]; });
@@ -739,9 +748,9 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     // tslint:disable-next-line:no-shadowed-variable
     function mouseOver(ths, d: any, pDatum) {
       if (ths.isServicesChart) { return; }
-      d3.selectAll('.c1b_rect')
+      d3.selectAll('.c1b_selectionrect')
         .style('opacity', function (o: any) {
-          return d.data.date === o.data.date && d[1] === o[1] ? 0.6 : 1;
+          return d.data.date === o.data.date && d[1] === o[1] ? 1 : 0;
         });
 
       /* Chart interactivity: Highlight matching agents in Chart2 - Bubble Chart */
@@ -767,8 +776,8 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // tslint:disable-next-line:no-shadowed-variable
     function mouseOut(ths, d: any) {
-      d3.selectAll('.c1b_rect')
-        .style('opacity', 1);
+      d3.selectAll('.c1b_selectionrect')
+        .style('opacity', 0);
       ths.divTooltip1b.style('opacity', 0);
 
       /* Chart interactivity: Revert highlighting in other chart */
@@ -790,8 +799,6 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /*
    * ## Agents Bubble Chart ##
-   *
-   * Based on Bubble Chart reading from JSON file: https://bl.ocks.org/john-guerra/0d81ccfd24578d5d563c55e785b3b40a
    */
 
   /*
@@ -825,9 +832,6 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const fileJSON = './../../../assets/agents.json';
 
-    // Clear out everything from the SVG element for this chart
-    d3.select('#d3chart2').selectAll('*').remove();
-
     // Pack bubbles
     const bubble = d3.pack()
       // TODO: breaks overall bubble pack layout resizing
@@ -837,14 +841,6 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       // })
       .size([diameter * marginFactor, diameter * marginFactor])
       .padding(2);
-
-    // Set SVG client area size and position
-    const x = (width - diameter) / 2, y = (height - diameter) / 2;
-    const svg = d3.select('#d3chart2')
-      .attr('width', diameter)
-      .attr('transform', 'translate(' + x + ',' + y + ')')
-      // .attr('height', diameter)
-      .attr('class', 'bubble');
 
     // Get the data and build the elements
     d3.json(fileJSON, function (error, data: any) {
@@ -857,8 +853,20 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       const root = d3.hierarchy(classes(treeData))
         .sum(function (d: any) { return d.value; })
         .sort(function (a, b) { return b.value - a.value; });
-
       bubble(root);
+
+      // Clear out everything from the SVG element for this chart
+      d3.select('#d3chart2').selectAll('*').remove();
+      d3.select('#d3chart2_legend').selectAll('*').remove();
+
+      // Set SVG client area size and position
+      const x = (width - diameter) / 2, y = (height - diameter) / 2;
+      const svg = d3.select('#d3chart2')
+        .attr('width', diameter)
+        .attr('transform', 'translate(' + x + ',' + y + ')')
+        // .attr('height', diameter)
+        .attr('class', 'bubble');
+
       nodes = svg.selectAll('.c2_node')
         .data(root.children)
         .enter().append('g')
@@ -872,16 +880,19 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .attr('cy',  function (d: any) { return d.cy; })
         .style('fill', function (d: any) {
           // d3.select(this).attr('color-val', d.data.rating_avg.toString());
-          const clr = d3sc.interpolateRdYlBu(d.data.rating_avg);
+          const clr = interpolateRdYlBu(d.data.rating_avg);
           // d.data.colorval = bubbleClr;
           return clr;
         })
         .on('mouseover', (d) => { mouseOver(ths, d); })
         .on('mouseout', (d) => { mouseOut(ths, d); });
 
+      const font = ths.isFirefox ? 'sans-serif' : 'Open Sans';  // Open Sans not working on FF.
+      const fontsize = ths.isFirefox ? '12px' : '13.5px';
       labels = nodes.append('text')
-        .style('font', 'ariel')
-        .style('font-size', '13.5px')
+        .style('font-family', font)
+        .style('font-style', 'condensed')
+        .style('font-size', fontsize)
         .style('font-weight', 'bold')
         // .style('fill', 'white')
         .attr('dy', '.3em')
@@ -906,20 +917,20 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .delay(Math.max(ths.durationFadeBubbleChart - 500, 0))
         .duration(500)
         .style('opacity', '1');
-    });
 
-    // Legend
-    const xLegend = 8, yLegend = 20, widthLegend = 145, heightLegend = 20;
-    const svgLegend = d3.select('#d3chart2_legend');
-    svgLegend.append('text').style('user-select', 'none').attr('x', xLegend).attr('y', yLegend - 6)
+      // Legend
+      const xLegend = 8, yLegend = 20, widthLegend = 145, heightLegend = 20;
+      const svgLegend = d3.select('#d3chart2_legend');
+      svgLegend.append('text').style('user-select', 'none').attr('x', xLegend).attr('y', yLegend - 6)
       .text('Agent Rating');
-    const clrScale = d3.scaleSequential(d3sc.interpolateRdYlBu).domain([0, 1]);
-    const clrBar = svgLegend.append('g')
-      .style('user-select', 'none')
-      .attr('transform', 'translate(' + xLegend + ',' + yLegend + ')')
-      .call(d3cb.colorbarH(clrScale, widthLegend, heightLegend).tickValues([0, 0.5, 1]));
+      const clrScale = d3.scaleSequential(interpolateRdYlBu).domain([0, 1]);
+      const clrBar = svgLegend.append('g')
+        .style('user-select', 'none')
+        .attr('transform', 'translate(' + xLegend + ',' + yLegend + ')')
+        .call(colorbarH(clrScale, widthLegend, heightLegend).tickValues([0, 0.5, 1]));
 
-    d3.select(self.frameElement).style('height', diameter + 'px');
+      d3.select(self.frameElement).style('height', diameter + 'px');
+    });
 
     // tslint:disable-next-line:no-shadowed-variable
     function mouseOver(ths, d: any) {
@@ -945,7 +956,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       } else {
         // ...in Chart1b - Activities Stacked Bar Chart
         const agentClass = '.A' + agent;
-        d3.selectAll(agentClass).style('opacity', 0.2);
+        d3.selectAll(agentClass).style('stroke', ths.clrRemoteHighlight).style('opacity', 1);
       }
       /* End chart interactivity */
 
@@ -953,8 +964,8 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       ths.divTooltip2.html(buildNodeTooltipHTML(d, true));
       const evt = d3.event;
       const wTT = ths.divTooltip2.node().clientWidth, hTT = ths.divTooltip2.node().clientHeight;
-      const xTT = evt.pageX < (window.innerWidth - wTT) - ths.marginTT ? evt.pageX + 12 : (evt.pageX + 12) - wTT;
-      const yTT = evt.pageY < window.innerHeight - hTT ? evt.pageY - 12 : (evt.pageY - 12) - hTT;
+      const xTT = evt.pageX < (window.innerWidth - wTT) - ths.marginTT ? evt.pageX + 12 : (evt.pageX - 12) - wTT;
+      const yTT = evt.pageY < window.innerHeight - hTT ? evt.pageY - 12 : (evt.pageY + 12) - hTT;
       ths.divTooltip2.style('opacity', 0.9)
         .style('left', xTT + 'px')
         .style('top', yTT + 'px');
@@ -971,9 +982,9 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       if (ths.isServicesChart) {
         d3.selectAll('.c1a_circle')
         .style('stroke', ths.clrServicesNodeOutline)
-        .style('stroke-width', '3')
+        .style('stroke-width', '3');
       } else {
-        d3.selectAll('.c1b_rect').style('opacity', 1)
+        d3.selectAll('.c1b_selectionrect').style('stroke', ths.clrHighlight).style('opacity', 0);
       }
       /* End chart interactivity */
     };

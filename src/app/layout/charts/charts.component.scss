@@ -1,27 +1,10 @@
-// .right.floated {
-//   float: right;
-//   vertical-align: middle;
-//   position: relative;  
-//   margin: 0 auto;
-//   // margin-top: 10px;
-// }
-// div.card-footer {
-//   border: 2px solid blue;
-//   // height: 20px;
-//   position: relative;  
-//   display: block;
-//   display: inline-block;
-//   justify-content:center;
-//   vertical-align: middle;
-// }
+* {
+  font-family: Lucida Sans Unicode,Lucida Grande,sans-serif;
+}
 
 .d3svgchart {
   height: 540px;
 }
-
-// #d3chart1b {
-//   display: none;
-// }
 
 .d3svgchart_legend {
   height: 58px;
@@ -29,18 +12,6 @@
   // display: inline-block;
   flex-shrink: 0;
 }
-
-// #d3chart1_legend > text:nth-child(1) {
-//   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
-// }
-// #d3chart2_legend > text:nth-child(1) {
-//   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
-// }
-// .d3svgchart_legend .text {
-//   font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
-//   // font-family: 'arial' !important;
-//   font-weight: 'normal' !important;
-// }
 
 .card-block {
   height: 586px;
@@ -63,26 +34,13 @@
   margin: 10px;
 }
 
-// .node circle {
-//   fill: #fff;
-//   stroke: steelblue;
-//   stroke-width: 3px;
-// }
-// .node text {
-//   font: 12px sans-serif;
-// }
-// .link {
-//   fill: none;
-//   stroke: #ccc;
-//   stroke-width: 2px;
-// }
-
 div.d3tooltip {
   pointer-events: none;  // Else tooltip can eat mouseovers, which is a problem when it's hidden.
   position: absolute;
   text-align: center;
   padding: 6px;
   font: 12px sans-serif;
+  font-size: 13px;
   background: lightsalmon;
   border: 0px;
   border-radius: 8px;
