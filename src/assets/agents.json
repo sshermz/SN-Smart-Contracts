@@ -365,6 +365,9 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033",
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -752,6 +755,10 @@
             "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
             "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
             "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+            "0x55bbeefc255bb15f16d0913f72bf63517a5cd033",
+            "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+            "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+            "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
             "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
           ]
         },
@@ -825,7 +832,10 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29"
     ]
   },
   {
@@ -833,7 +843,7 @@
     "description": "Loving AI Chatbot",
     "wealth": 671.84076341,
     "rating": {
-      "average": 0.12,
+      "average": 0.92,
       "count": 6
     },
     "services": [
@@ -870,7 +880,10 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1"
     ]
   },
   {
@@ -1236,9 +1249,6 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -1707,7 +1717,7 @@
     "description": "Semantic Relation Extraction",
     "wealth": 563.2047342,
     "rating": {
-      "average": 0.74,
+      "average": 0.84,
       "count": 5
     },
     "services": [
@@ -1744,7 +1754,10 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033",
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58"
     ]
   },
   {
@@ -2113,7 +2126,10 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033",
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58"
     ]
   },
   {
@@ -2571,7 +2587,6 @@
     ],
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
@@ -2581,7 +2596,7 @@
     "description": "Gene Expression Supervised Learning",
     "wealth": 701.82395308,
     "rating": {
-      "average": 0.73,
+      "average": 0.83,
       "count": 16
     },
     "services": [
@@ -2617,8 +2632,7 @@
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58"
     ]
   },
   {
@@ -2987,7 +3001,12 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033",
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033",
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1"
     ]
   },
   {
@@ -3447,6 +3466,9 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -3455,7 +3477,7 @@
     "description": "Semantic Relation Extraction",
     "wealth": 589.05376341,
     "rating": {
-      "average": 0.25,
+      "average": 0.68,
       "count": 7
     },
     "services": [
@@ -3489,10 +3511,7 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29"
     ]
   },
   {
@@ -3500,7 +3519,7 @@
     "description": "Ghost Chatbot",
     "wealth": 182.30470218,
     "rating": {
-      "average": 0.43,
+      "average": 0.83,
       "count": 6
     },
     "services": [
@@ -3860,6 +3879,8 @@
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
@@ -3869,7 +3890,7 @@
     "description": "Natural Language Processing",
     "wealth": 791.20825124,
     "rating": {
-      "average": 0.62,
+      "average": 0.92,
       "count": 4
     },
     "services": [
@@ -4320,7 +4341,6 @@
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -4363,10 +4383,6 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
   {
@@ -4374,7 +4390,7 @@
     "description": "Image Analysis",
     "wealth": 453.6785284,
     "rating": {
-      "average": 0.38,
+      "average": 0.08,
       "count": 8
     },
     "services": [
@@ -4734,7 +4750,6 @@
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -5195,6 +5210,10 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033",
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -5238,8 +5257,6 @@
     ],
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -5607,9 +5624,7 @@
     ],
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29"
     ]
   },
   {
@@ -6066,7 +6081,6 @@
       ]
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
@@ -6077,7 +6091,7 @@
     "description": "Natural Language Processing",
     "wealth": 649.44376341,
     "rating": {
-      "average": 0.19,
+      "average": 0.79,
       "count": 2
     },
     "services": [
@@ -6114,15 +6128,16 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
   {
-    "address": "0x1e80b59f9b9c2762e55c01829bc5141130f563d3a",
+    "address": "0x1e80b59f9b9c2762e55c01829bc5141130f563d3",
     "description": "Scene Description",
     "wealth": 187.30470218,
     "rating": {
-      "average": 0.55,
+      "average": 0.15,
       "count": 6
     },
     "services": [
@@ -6483,6 +6498,7 @@
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -6491,7 +6507,7 @@
     "description": "Video Analysis",
     "wealth": 903.90895127,
     "rating": {
-      "average": 0.77,
+      "average": 0.97,
       "count": 18
     },
     "services": [
@@ -6940,8 +6956,6 @@
       ]
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
@@ -6985,8 +6999,6 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
@@ -6996,7 +7008,7 @@
     "description": "Image Analysis",
     "wealth": 360.38852841,
     "rating": {
-      "average": 0.28,
+      "average": 0.88,
       "count": 5
     },
     "services": [
@@ -7361,7 +7373,7 @@
     ]
   },
   {
-    "address": "0x54e802471e324456746af2a6c998d87224e1fe30e",
+    "address": "0x54e802471e324456746af2a6c998d87224e1fe30",
     "description": "Natural Language Processing",
     "wealth": 352.03995028,
     "rating": {
@@ -7860,6 +7872,8 @@
     ],
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
@@ -8733,10 +8747,6 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
   {
@@ -8744,7 +8754,7 @@
     "description": "Video Analysis",
     "wealth": 147.30470218,
     "rating": {
-      "average": 0.52,
+      "average": 0.92,
       "count": 9
     },
     "services": [
@@ -9113,7 +9123,7 @@
     "description": "Natural Language Processing",
     "wealth": 821.60825124,
     "rating": {
-      "average": 0.7,
+      "average": 0.85,
       "count": 12
     },
     "services": [
@@ -9562,10 +9572,7 @@
       ]
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58"
     ]
   },
   {
@@ -9608,8 +9615,6 @@
     ],
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -9987,7 +9992,7 @@
     "description": "Dialogue",
     "wealth": 382.58975028,
     "rating": {
-      "average": 0.69,
+      "average": 0.89,
       "count": 2
     },
     "services": [
@@ -10436,6 +10441,7 @@
       ]
     ],
     "pendingContracts": [
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
@@ -11321,7 +11327,7 @@
     "description": "Natural Language Processing",
     "wealth": 676.3006634,
     "rating": {
-      "average": 0.09,
+      "average": 0.49,
       "count": 2
     },
     "services": [
@@ -12184,10 +12190,7 @@
       ]
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58"
     ]
   },
   {
@@ -12230,6 +12233,8 @@
     ],
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
@@ -13058,6 +13063,10 @@
       ]
     ],
     "pendingContracts": [
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
+      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033",
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
       "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
@@ -13943,7 +13952,7 @@
     "description": "Audio Analysis",
     "wealth": 671.84076341,
     "rating": {
-      "average": 0.09,
+      "average": 0.91,
       "count": 6
     },
     "services": [
@@ -13977,10 +13986,7 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58"
     ]
   },
   {
@@ -14357,7 +14363,7 @@
     "description": "Biological Data Analysis",
     "wealth": 981.60825124,
     "rating": {
-      "average": 0.62,
+      "average": 0.72,
       "count": 3
     },
     "services": [
@@ -14806,10 +14812,6 @@
       ]
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
   {
@@ -14817,7 +14819,7 @@
     "description": "Biological Data Analysis",
     "wealth": 563.2047342,
     "rating": {
-      "average": 0.74,
+      "average": 0.84,
       "count": 5
     },
     "services": [
@@ -15680,9 +15682,6 @@
       ]
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -16610,7 +16609,7 @@
     "description": "Video Analysis",
     "wealth": 142.30470218,
     "rating": {
-      "average": 0.63,
+      "average": 0.83,
       "count": 9
     },
     "services": [
@@ -18347,10 +18346,6 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
   {
@@ -19187,7 +19182,7 @@
     "description": "Dialogue",
     "wealth": 659.44376341,
     "rating": {
-      "average": 0.07,
+      "average": 0.67,
       "count": 9
     },
     "services": [
@@ -19221,10 +19216,7 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0xdb05a222224416b2c2e11b047f8b2e78978effd1"
     ]
   },
   {
@@ -19601,7 +19593,7 @@
     "description": "Dialogue",
     "wealth": 951.00895127,
     "rating": {
-      "average": 0.74,
+      "average": 0.95,
       "count": 15
     },
     "services": [
@@ -20050,10 +20042,7 @@
       ]
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
-      "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
+      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29"
     ]
   },
   {
@@ -20471,7 +20460,7 @@
     ]
   },
   {
-    "address": "0x68e122471e324456746af2a6c998d87224e1fe30e",
+    "address": "0x68e122471e324456746af2a6c998d87224e1fe30",
     "description": "Natural Language Processing",
     "wealth": 392.03995028,
     "rating": {
@@ -20969,8 +20958,6 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
       "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
@@ -22728,7 +22715,7 @@
     "description": "Ontologies' services",
     "wealth": 397.57852844,
     "rating": {
-      "average": 0.38,
+      "average": 0.08,
       "count": 12
     },
     "services": [
@@ -23591,9 +23578,6 @@
       }
     ],
     "pendingContracts": [
-      "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -24431,7 +24415,7 @@
     "description": "Text and ontological summarization services",
     "wealth": 656.3006634,
     "rating": {
-      "average": 0.08,
+      "average": 0.58,
       "count": 3
     },
     "services": [
@@ -25295,8 +25279,6 @@
     ],
     "pendingContracts": [
       "0xdb05a222224416b2c2e11b047f8b2e78978effd1",
-      "0x25ef214fff3646bb1f4e141a18ab30c845b77c29",
-      "0x8f6b1ccd3a990601d04c132a0af84c6f62b58c58",
       "0x55bbeefc255bb15f16d0913f72bf63517a5cd033"
     ]
   },
@@ -25719,7 +25701,7 @@
     "description": "Biological Data Analysis",
     "wealth": 395.58975028,
     "rating": {
-      "average": 0.69,
+      "average": 0.89,
       "count": 5
     },
     "services": [

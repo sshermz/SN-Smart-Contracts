@@ -6,12 +6,12 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs nav-justified card-header-tabs" role="tablist" id="myTabs">
                         <li class="nav-item" role="presentation">
-                            <a *ngIf="isServicesChart" class="nav-link active" href="javascript:void(0)" (click)="toggleChart()">Services</a>
-                            <a *ngIf="!isServicesChart" class="nav-link" href="javascript:void(0)" (click)="toggleChart()">Services</a>
+                            <a *ngIf="isServicesChart" class="nav-link active" href="javascript:void(0)" (click)="toggleChart1()" ngbTooltip="Ontology of Services provided by Agents">Services</a>
+                            <a *ngIf="!isServicesChart" class="nav-link" href="javascript:void(0)" (click)="toggleChart1()" ngbTooltip="Ontology of Services provided by Agents">Services</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a *ngIf="isServicesChart" class="nav-link" href="javascript:void(0)" (click)="toggleChart()">Activity</a>
-                            <a *ngIf="!isServicesChart" class="nav-link active" href="javascript:void(0)" (click)="toggleChart()">Activity</a>
+                            <a *ngIf="isServicesChart" class="nav-link" href="javascript:void(0)" (click)="toggleChart1()" ngbTooltip="Contracts Activity by Agents">Activity</a>
+                            <a *ngIf="!isServicesChart" class="nav-link active" href="javascript:void(0)" (click)="toggleChart1()" ngbTooltip="Contracts Activity by Agents">Activity</a>
                         </li>
                     </ul>
                 </div>
@@ -19,37 +19,47 @@
                     <svg class="d3svgchart" id="d3chart1" height="540px"></svg>
                 </div>
                 <div class="card-footer">
-                    <div *ngIf="isShowBtnsChart1">
-                        <button type="button" class="btn btn-info btn-sm" style="float:left" (click)="collapse_all()" ngbTooltip="Collapse All">
+                    <div *ngIf="isShowBtnsChart1a">
+                        <button type="button" class="btn btn-info btn-sm" style="float:left" (click)="leftBtnChart1()" ngbTooltip="Collapse All">
                             <span class="fa fa-compress fa-lg"></span>
                         </button>
                     </div>
-                    <svg class="d3svgchart_legend" id="d3chart1_legend" width="165px"></svg>
-                    <div *ngIf="isShowBtnsChart1">
-                        <button type="button" class="btn btn-info btn-sm" style="float:right" (click)="expand_all()" ngbTooltip="Expand All">
+                    <!-- <div *ngIf="isShowBtnsChart1b">
+                      <button type="button" class="btn btn-info btn-sm" style="float:left" (click)="leftBtnChart1()" ngbTooltip="Collapse All">
+                          <span class="fa fa-check fa-lg"></span>
+                      </button>
+                    </div> -->
+                  <svg class="d3svgchart_legend" id="d3chart1_legend" width="165px"></svg>
+                    <div *ngIf="isShowBtnsChart1a">
+                        <button type="button" class="btn btn-info btn-sm" style="float:right" (click)="rightBtnChart1()" ngbTooltip="Expand All">
                             <span class="fa fa-expand fa-lg"></span>
                         </button>
                     </div>
+                    <!-- <div *ngIf="isShowBtnsChart1b">
+                      <button type="button" class="btn btn-info btn-sm" style="float:left" (click)="rightBtnChart1()" ngbTooltip="Collapse All">
+                          <span class="fa fa-tasks fa-lg"></span>
+                      </button>
+                    </div> -->
                 </div>
             </div>
         </div>
         <div class="col col-sm-6">
             <div class="card mb-3">
                 <div class="card-header">
-                    <span>Agents</span>
+                    <span ngbTooltip="Agents Network">Agents</span>
                 </div>
                 <div class="card-block" id=d3chart2_card_block>
                     <svg class="d3svgchart" id="d3chart2" height="540px"></svg>
                 </div>
                 <div class="card-footer">
                     <div *ngIf="isShowBtnsChart2">
-                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="remove_agent()" ngbTooltip="Remove Agent">
+                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="leftBtnChart2()" ngbTooltip="Remove Agent">
                             <span class="fa fa-user-times fa-lg"></span>
                         </button>
                     </div>
                     <svg class="d3svgchart_legend" id="d3chart2_legend" width="165px"></svg>
                     <div *ngIf="isShowBtnsChart2">
-                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="hire_agent()" ngbTooltip="Hire Agent">
+                        <button class="btn btn-info btn-sm disabled" style="float:right" (click)="rightBtnChart2()" ngbTooltip="Hire Agent">
                             <span class="fa fa-user-plus fa-lg"></span>
                         </button>
                     </div>

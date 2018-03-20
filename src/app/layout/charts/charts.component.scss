@@ -1,4 +1,4 @@
-* {
+body {
   font-family: Lucida Sans Unicode,Lucida Grande,sans-serif;
 }
 
@@ -21,6 +21,14 @@
   height: 54px;
 }
 
+.card-header span,
+.card-header a,
+.breadcrumb *,
+ngb-tooltip-window div
+{
+  user-select: none;
+}
+
 .card-footer {
   height: 80px;
   // white-space: nowrap;
@@ -37,7 +45,6 @@
 div.d3tooltip {
   pointer-events: none;  // Else tooltip can eat mouseovers, which is a problem when it's hidden.
   position: absolute;
-  text-align: center;
   padding: 6px;
   font: 12px sans-serif;
   font-size: 13px;
@@ -45,4 +52,9 @@ div.d3tooltip {
   border: 0px;
   border-radius: 8px;
   box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+// div.d3tooltip th, tr, td {
+div.d3tooltip th, tr {
+  border-top: none !important;
 }

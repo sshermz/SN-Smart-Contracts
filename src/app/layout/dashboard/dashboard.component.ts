@@ -49,10 +49,10 @@ export class DashboardComponent implements OnInit {
             imagePath: 'assets/images/slider5.jpg',
             label: '',
             text: ''
-        // }, {
-        //     imagePath: 'assets/images/slider6.jpg',
-        //     label: '',
-        //     text: ''
+        }, {
+            imagePath: 'assets/images/slider6.jpg',
+            label: '',
+            text: ''
         });
 
         // this.alerts.push({

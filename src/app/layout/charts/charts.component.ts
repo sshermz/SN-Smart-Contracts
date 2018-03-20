@@ -17,9 +17,19 @@ import * as d3 from 'd3';
 })
 export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   static result: boolean;
-  private isShowBtnsChart1 = true;
+  private isShowBtnsChart1a = true;
+  private isShowBtnsChart1b = false;
   private isShowBtnsChart2 = true;
   private isServicesChart = true;
+  private isSelectionChart1a = false;
+  private selectionDataChart1a = null;
+  private selectionAgentListChart1a = null;
+  // private isSelectionChart1b = false;
+  // private selectionDataChart1b = null;
+  // private isSelectionChart2 = false;
+  // private selectionDataChart2 = null;
+  private dataChart2 = null;
+  private bubble = null;
   private minWidthShowBtns = 300;
   private lastWindowWidth = 0;
   private isInitialLoadChart1a = true;
@@ -29,55 +39,85 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   private divTooltip1b = null;
   private divTooltip2 = null;
   private marginTT = 30;
+  private opacityTT = 0.92;
   private root = null;
   private treemap = null;
   private svg = null;
-  private svgMargin = { top: 20, right: 20, bottom: 20, left: 20 };
+  private svgMargin = { top: 0, right: 20, bottom: 20, left: 20 };
   private widthChart1 = 0;
   private durationMoveElement = 750;
   private durationFadeCharts = 2000;
   private durationFadeActivityChart = 1500;
   private durationFadeBubbleChart = 1250;
-  private agentCoveredCnt = 15;
+  private arrAgents = [];
+  private agentMaxCoveredCnt = 15;
+  private serviceMaxPendCnt = 15;
+  private serviceMaxFullyExpandedNodesCount = 50;
   private clrServicesNodeOutline = 'steelblue';
   private clrHighlight = 'lightsalmon';
-  private clrRemoteHighlight = 'lightsalmon';
-  private strokewidthHighlight = '5';
+  private strokeHighlight = 5;
+  private strokeServiceHighlight = 3;
+  private strokeServicesNodeSelected = 5;
+  private strokeServicesNodeOutline = 3;
+  private clrSelected = 'dimgrey';
   private clrTooltip = 'lightsalmon';
+  private font;
+  private fontsize;
   private isFirefox = navigator.userAgent.indexOf('Firefox') !== -1;
 
   /*
   * ## Static Functions ##
   */
 
+  // Collapse a node
+  private static collapseNode(d) {
+    d._children = d.children;
+    d.children = null;
+  }
+
+  // Expand a node
+  private static expandNode(d) {
+    d.children = d._children;
+    d._children = null;
+  }
+
   // Collapse a node and all it's children
-  private static collapse(d) {
+  private static collapseNodesRecursive(d) {
     if (d.children) {
       d._children = d.children;
-      d._children.forEach(ChartsComponent.collapse);
+      d._children.forEach(ChartsComponent.collapseNodesRecursive);
       d.children = null;
     }
   }
 
   // Expand a node and all it's children
-  private static expand(d) {
+  private static expandNodesRecursive(d) {
     const children = (d.children) ? d.children : d._children;
     if (d._children) {
       d.children = d._children;
       d._children = null;
     }
     if (children) {
-      children.forEach(ChartsComponent.expand);
+      children.forEach(ChartsComponent.expandNodesRecursive);
     }
   }
 
-  // Test if tree fully expanded or not
-  private static isExpandedAll(d): boolean {
+  // Test if node is expanded or not
+  private static isNodeCollapsed(d): boolean {
+    if (d.children) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  // Test if node and children fully expanded or not
+  private static isNodeExpandedRecursive(d): boolean {
     if (d._children) {
       return false;
     } else if (d.children) {
       for (let i = 0; i < d.children.length; i++) {
-        this.result = ChartsComponent.isExpandedAll(d.children[i]);
+        this.result = ChartsComponent.isNodeExpandedRecursive(d.children[i]);
         if (this.result === false) { break; }
       }
       return this.result;
@@ -85,10 +125,10 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     return true;
   }
 
-  // Sort service nodes
-  private static sortServices(d) {
+  // Sort nodes
+  private static sortNodes(d) {
     if (d.children) {
-      d.children.sort(function(a, b) {
+      d.children.sort(function (a, b) {
         return a.data.description.toUpperCase().localeCompare(b.data.description.toUpperCase());
       })
     }
@@ -104,6 +144,8 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.lastWindowWidth = window.innerWidth;
+    this.font = this.isFirefox ? 'sans-serif' : 'Open Sans';  // Open Sans not working on FF.
+    this.fontsize = this.isFirefox ? 12 : 13.5;
 
     // Init Charts
     this.initChart1a(this);
@@ -137,15 +179,11 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  /*
-  * ## Global Functions ##
-  */
-
   private fadeCharts(isFadeIn: boolean) {
     if (isFadeIn) {
       // const duration = this.isServicesChart ? this.durationFadeServiceChart : this.durationFadeCharts;
       d3.select('#d3chart1').transition().duration(this.durationFadeCharts).style('opacity', 1);
-//      d3.select('#d3chart2').transition().duration(this.durationFadeCharts).style('opacity', 1);
+      //      d3.select('#d3chart2').transition().duration(this.durationFadeCharts).style('opacity', 1);
       d3.select('#d3chart2').transition().duration(0).style('opacity', 1);
     } else {
       d3.select('#d3chart1').style('opacity', 0);
@@ -153,37 +191,54 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private toggleChart() {
+  private toggleChart1() {
     this.isServicesChart = !this.isServicesChart;
     if (this.isServicesChart) {
       this.drawChart1a(this);
     } else {
+      // If there was a selection in Services chart, cancel it
+      if (this.isSelectionChart1a) {
+        this.isSelectionChart1a = false;
+        this.selectionDataChart1a = this.selectionAgentListChart1a = null;
+        this.drawChart2(this);
+      }
+
       this.drawChart1b(this);
     }
   }
 
-  private expand_all() {
-    // console.log('expandAll()');
-    if (!ChartsComponent.isExpandedAll(this.root)) {
-      ChartsComponent.expand(this.root);
-      this.updateChart1a(this, this.root);
+  // Collapse all nodes
+  private leftBtnChart1() {
+    if (this.isServicesChart) {
+      if (this.root.children) {
+        ChartsComponent.collapseNodesRecursive(this.root);
+        this.updateChart1a(this, this.root);
+
+        // If there was a selection in Services chart, cancel it
+        if (this.isSelectionChart1a) {
+          this.isSelectionChart1a = false;
+          this.selectionDataChart1a = this.selectionAgentListChart1a = null;
+          this.drawChart2(this);
+        }
+      }
     }
   }
 
-  private collapse_all() {
-    // console.log('collapseAll()');
-    if (this.root.children) {
-      this.root.children.forEach(ChartsComponent.collapse);
-      ChartsComponent.collapse(this.root);
-      this.updateChart1a(this, this.root);
+  // Expand all nodes
+  private rightBtnChart1() {
+    if (this.isServicesChart) {
+      if (!ChartsComponent.isNodeExpandedRecursive(this.root)) {
+        ChartsComponent.expandNodesRecursive(this.root);
+        this.updateChart1a(this, this.root);
+      }
     }
   }
 
-  private hire_agent() {
+  private leftBtnChart2() {
     alert('Not implemented yet');
   }
 
-  private remove_agent() {
+  private rightBtnChart2() {
     alert('Not implemented yet');
   }
 
@@ -194,37 +249,28 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     return `M ${s.y} ${s.x} C ${(s.y + d.y) / 2} ${s.x}, ${(s.y + d.y) / 2} ${d.x}, ${d.y} ${d.x}`;
   }
 
-  // Toggle children on click
-  private clickChart1a(ths, d) {
-    // Hide tooltip. Use transition to help avoid unintentional new tooltips if transitioning nodes slide under cursor
-    ths.divTooltip1a.transition().duration(500).style('opacity', 0);
-
-    if (!(d.children || d._children)) { return; }
-    if (d.children) {
-      d._children = d.children;
-      d.children = null;
-    } else {
-      d.children = d._children;
-      d._children = null;
-    }
-    ths.updateChart1a(ths, d);
-
-    // Insure that no nodes were unintentionally highlighted by sliding under cursor during transition
-    d3.selectAll('.c1a_circle').style('stroke', ths.clrServicesNodeOutline).style('stroke-width', '3');  // TODO: Doesn't work?
-  }
-
-  private contains(a, obj) {
-    if (!a) { return false; }
-    for (let i = 0; i < a.length; i++) {
-      if (a[i] === obj) {
-        return true;
+  private index(array, obj) {
+    if (!array) { return -1; }
+    for (let i = 0; i < array.length; i++) {
+      if (array[i] === obj) {
+        return i;
       }
     }
-    return false;
+    return -1;
+  }
+
+  private indexByField(array, array_field, obj) {
+    if (!array) { return -1; }
+    for (let i = 0; i < array.length; i++) {
+      if (array[i][array_field] === obj) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   /*
-   * ## Services Ontology Tree Chart ##
+   * ## Chart1a: Services Ontology Tree Chart ##
    */
 
   /*
@@ -248,12 +294,12 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
   private drawChart1a(ths) {
     const width = document.getElementById('d3chart1_card_block').clientWidth;
     const height = document.getElementById('d3chart1_card_block').clientHeight;
-    const marginFactor = 0.85;
+    const marginFactor = 0.90;
     ths.widthChart1 = width;
     // console.log('drawChart1: w=' + width + ', h=' + height);
 
-    // Room for Card Footer buttons?
-    ths.isShowBtnsChart1 = (width > ths.minWidthShowBtns) ? true : false;
+    ths.isShowBtnsChart1b = false;
+    ths.isShowBtnsChart1a = (width > ths.minWidthShowBtns) ? true : false;
 
     const fileJSON = './../../../assets/ontologies.json';
 
@@ -269,17 +315,25 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
 
       // Parse data into d3 hierarchy, assigning parent, services, height, depth
       ths.root = d3.hierarchy(treeData, function (d: any) { return d.services; })
-      .sort(function (a, b) { return a.data.description.toUpperCase().localeCompare(b.data.description.toUpperCase()); });  // Sort agents.
+        .sort(function (a, b) {  // Sort agents.
+           return a.data.description.toUpperCase().localeCompare(b.data.description.toUpperCase());
+          });
 
       // Root node position
       ths.root.x0 = height * 0.40;
       ths.root.y0 = 0;
 
       // Sort services
-      ths.root.children.forEach(ChartsComponent.sortServices);
+      ths.root.children.forEach(ChartsComponent.sortNodes);
 
-      // Collapse after 2nd level
-      ths.root.children.forEach(ChartsComponent.collapse);
+      // Get count of all nodes
+      const cntNodes = ths.root.count().value;
+      // console.log('Services Ontology Chart: Services Count=' + cntNodes);
+
+      // If large number of nodes, collapse after 2nd level
+      if (cntNodes > ths.serviceMaxFullyExpandedNodesCount) {
+        ths.root.children.forEach(ChartsComponent.collapseNode);
+      }
 
       // Clear out everything from the SVG element for this chart
       d3.select('#d3chart1').selectAll('*').remove();
@@ -294,20 +348,21 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .attr('transform', 'translate(' + ths.svgMargin.left + ',' + ths.svgMargin.top + ')')
 
       // Legend
-      const xLegend = 8, yLegend = 20, widthLegend = 145, heightLegend = 20;
+      const xLegend = 8, yLegend = 20, wLegend = 145, hLegend = 20;
       const svgLegend = d3.select('#d3chart1_legend');
-      svgLegend.append('text').style('user-select', 'none').attr('x', xLegend).attr('y', yLegend - 6).
-        text('Agent Coverage');
-      const clrScale = d3.scaleSequential(interpolateRdYlBu).domain([0, ths.agentCoveredCnt]);
+      svgLegend.append('text').style('user-select', 'none')
+        // .attr('x', xLegend).attr('y', yLegend - 6)  // Left aligned.
+        .attr('x', xLegend / 2 + wLegend / 2).attr('y', yLegend - 6).attr('width', wLegend).style('text-anchor', 'middle')  // Centered.
+        .text('Agent Count');
+      const clrScale = d3.scaleSequential(interpolateRdYlBu).domain([0, ths.agentMaxCoveredCnt]);
       const clrBar = svgLegend.append('g').style('user-select', 'none')
         .attr('transform', 'translate(' + xLegend + ',' + yLegend + ')')
-        .call(colorbarH(clrScale, widthLegend, heightLegend).tickValues([0, ths.agentCoveredCnt / 2, ths.agentCoveredCnt]));
+        .call(colorbarH(clrScale, wLegend, hLegend).tickValues([0, ths.agentMaxCoveredCnt / 2, ths.agentMaxCoveredCnt]));
 
       d3.select(self.frameElement).style('height', height + 'px');
 
       ths.updateChart1a(ths, ths.root);
     });
-
   }  /* End drawChart1a */
 
   /*
@@ -336,17 +391,15 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     // Enter any new nodes at the parent's previous position
     const nodeEnter = node.enter().append('g')
       .attr('class', 'c1a_node')
-      .attr('transform', function (d) { return 'translate(' + source.y0 + ',' + source.x0 + ')'; })
-      .on('click', function (d) {
-        ths.clickChart1a(ths, d);
-      });
+      .attr('transform', function (d) { return 'translate(' + source.y0 + ',' + source.x0 + ')'; });
 
     // Add Circle for the nodes
     nodeEnter.append('circle')
       .attr('class', 'c1a_circle')
       .attr('r', 1e-6)
       .on('mouseover', (d) => { mouseOver(ths, d); })
-      .on('mouseout', (d) => { mouseOut(ths, d); });
+      .on('mouseout', (d) => { mouseOut(ths, d); })
+      .on('click', (d) => { mouseClick(ths, d); });
 
     // Add label background outlines for the nodes (Places left or right depending on whether node has children or not)
     nodeEnter.append('text')
@@ -356,7 +409,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .attr('x', function (d) { return d.children || d._children ? -18 : 18; })
       .attr('text-anchor', function (d) { return d.children || d._children ? 'end' : 'start'; })
       .style('font-size', '14px')
-      .style('stroke-width', ths.strokewidthHighlight)
+      .style('stroke-width', ths.strokeHighlight)
       .style('stroke', '#fff')
       .text(function (d: any) {
         // const text = d.data.id.substring(0, 8);
@@ -395,7 +448,6 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .attr('text-anchor', 'middle')
       // .attr('dominant-baseline', 'central')
       .attr('dy', function () { return pxOffset; })
-      .style('font', 'ariel')
       .style('font-weight', 'bold')
       .style('font-size', '20px')
       .style('stroke-width', '2.5')
@@ -410,7 +462,6 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .attr('text-anchor', 'middle')
       // .attr('dominant-baseline', 'central')
       .attr('dy', function () { return pxOffset; })
-      .style('font', 'ariel')
       .style('font-weight', 'bold')
       .style('font-size', '20px')
       // .style('fill', 'white')
@@ -427,23 +478,27 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       .attr('transform', function (d) { return 'translate(' + d.y + ',' + d.x + ')'; });
 
     // Update the node attributes and style
+    const scale = d3.scaleLinear().domain([0, ths.agentMaxCoveredCnt]).range([0, 1]);
     nodeUpdate.select('.c1a_circle')
       .attr('r', 12)
       // .style('font', '12px sans-serif')
       .style('fill', function (d) {
-        if (d.depth === 0) { return '#fff';
+        // if (d.depth === 0) { return '#fff';
+        if (d.depth !== 1) {
+          return '#fff';
         } else {
           let agents = null;
-          if (d.depth === 1) { agents = d.data.agents;
+          if (d.depth === 1) {
+            agents = d.data.agents;
           } else { if (d.depth === 2) { agents = d.parent.data.agents; } }
-          const scale = d3.scaleLinear().domain([0, ths.agentCoveredCnt]).range([0, 1]);
           const clr = interpolateRdYlBu(scale(agents ? agents.length : 0));
           return clr;
         }
       })
       .style('stroke', ths.clrServicesNodeOutline)
       .style('stroke-width', '3')
-      .attr('cursor', function(d) { return d.children || d._children ? 'pointer' : 'default' });
+      // .attr('cursor', function (d) { return d.children || d._children ? 'pointer' : 'default' });
+      .attr('cursor', 'pointer');
 
     // nodeUpdate.select('.c1a_text')
     nodeUpdate.selectAll('.c1a_text')  // Workaround.
@@ -505,74 +560,194 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       d.y0 = d.y;
     });
 
-  // tslint:disable-next-line:no-shadowed-variable
-  function mouseOver(ths, d: any) {
-    if (!ths.isServicesChart) { return; }
-    d3.selectAll('.c1a_circle')
-      .style('stroke', function (o: any) {
-        return d.data.id === o.data.id ? ths.clrHighlight : ths.clrServicesNodeOutline;
-      });
+    // If there's a selection, insure that it gets redrawn
+    if (ths.isSelectionChart1a) {
+      d3.selectAll('.c1a_circle')
+        .style('stroke-width', function (o: any) {
+          return ths.selectionDataChart1a.data.id === o.data.id ? ths.strokeServicesNodeSelected : ths.strokeServicesNodeOutline;
+        })
+        .style('stroke', function (o: any) {
+          return ths.selectionDataChart1a.data.id === o.data.id ? ths.clrSelected : ths.clrServicesNodeOutline;
+        });
+    }
 
-    /* Chart interactivity: Highlight matching agents in Chart2 - Bubble Chart */
-    let agents = null;
-    if (d.depth === 1) { agents = d.data.agents;
-    } else { if (d.depth === 2) { agents = d.parent.data.agents; } }
-    d3.selectAll('.c2_circle')
-      .style('stroke', function (o: any) {
-        const match = ths.contains(agents, o.data.address);
-        return match ? ths.clrRemoteHighlight : 'white';
-      }).style('stroke-width', function (o: any) {
-        const match = ths.contains(agents, o.data.address);
-        return match ? ths.strokewidthHighlight : '1';
-      });
-    /* End chart interactivity */
+    // tslint:disable-next-line:no-shadowed-variable
+    function mouseOver(ths, d: any) {
+      if (!ths.isServicesChart) { return; }
+      d3.selectAll('.c1a_circle')
+        .style('stroke', function (o: any) {
+          let stroke;
+          if (ths.isSelectionChart1a) {
+            if (d.data.id === o.data.id) {
+              stroke = ths.clrHighlight;
+            } else {
+              stroke = ths.selectionDataChart1a.data.id === o.data.id ? ths.clrSelected : ths.clrServicesNodeOutline;
+            }
+          } else {
+            stroke = d.data.id === o.data.id ? ths.clrHighlight : ths.clrServicesNodeOutline;
+          }
+          return stroke;
+        });
 
-    // Show HTML Tooltip
-    ths.divTooltip1a.html(buildNodeTooltipHTML(d, d.depth === 1));
-    const evt = d3.event;
-    const wTT = ths.divTooltip1a.node().clientWidth, hTT = ths.divTooltip1a.node().clientHeight;
-    const xTT = evt.pageX < (window.innerWidth - wTT) - ths.marginTT ? evt.pageX + 12 : (evt.pageX + 12) - wTT;
-    const yTT = evt.pageY < window.innerHeight - hTT ? evt.pageY - 12 : (evt.pageY - 12) - hTT;
-    ths.divTooltip1a.style('opacity', 0.9)
-      .style('left', xTT + 'px')
-      .style('top', yTT + 'px');
-  };
+      /* Chart interactivity: Highlight matching agents in Chart2 - Bubble Chart */
+      let agents = null;
+      if (d.depth === 1) {
+        agents = d.data.agents;
+      } else if (d.depth === 2) {
+        agents = d.parent.data.agents;
+      }
+      if (agents) {
+        d3.selectAll('.c2_circle')
+          .style('stroke', function (o: any) {
+            const match = ths.index(agents, o.data.address) >= 0;
+            return match ? ths.clrHighlight : 'white';
+          }).style('stroke-width', function (o: any) {
+            const match = ths.index(agents, o.data.address) >= 0;
+            return match ? ths.strokeHighlight : '1';
+          });
+      }
+      /* End chart interactivity */
 
-  // tslint:disable-next-line:no-shadowed-variable
-  function mouseOut(ths, d: any) {
-    d3.selectAll('.c1a_circle')
-      .style('stroke', ths.clrServicesNodeOutline)
-      .style('stroke-width', '3');
-    ths.divTooltip1a.style('opacity', 0);
+      // Show HTML Tooltip
+      ths.divTooltip1a.html(buildNodeTooltipHTML(d, d.depth === 1));
+      const evt = d3.event;
+      const wTT = ths.divTooltip1a.node().clientWidth, hTT = ths.divTooltip1a.node().clientHeight;
+      const xTT = evt.pageX < (window.innerWidth - wTT) - ths.marginTT ? evt.pageX + 12 : (evt.pageX + 12) - wTT;
+      const yTT = evt.pageY < window.innerHeight - hTT ? evt.pageY - 12 : (evt.pageY - 12) - hTT;
+      ths.divTooltip1a.style('opacity', ths.opacityTT)
+        .style('left', xTT + 'px')
+        .style('top', yTT + 'px');
+    };
 
-    /* Chart interactivity: Revert highlighting in other chart */
-    d3.selectAll('.c2_circle')
-      .style('stroke', 'white')
-      .style('stroke-width', '1');
-    /* End chart interactivity */
-  };
+    // tslint:disable-next-line:no-shadowed-variable
+    function mouseOut(ths, d: any) {
+      ths.divTooltip1a.style('opacity', 0);
 
-  function buildNodeTooltipHTML(d, verbose) {
-      const headText = (d.data.id === null || d.data.id === '') ? d.data.description : d.data.description + '<hr>' + d.data.id;
+      d3.selectAll('.c1a_circle')
+        .style('stroke', ths.clrServicesNodeOutline)
+        .style('stroke-width', ths.strokeServicesNodeOutline);
+
+      // If there's a selection, redraw selection
+      if (ths.isSelectionChart1a) {
+        d3.selectAll('.c1a_circle')
+          .style('stroke-width', function (o: any) {
+            return ths.selectionDataChart1a.data.id === o.data.id ? ths.strokeServicesNodeSelected : ths.strokeServicesNodeOutline;
+          })
+          .style('stroke', function (o: any) {
+            return ths.selectionDataChart1a.data.id === o.data.id ? ths.clrSelected : ths.clrServicesNodeOutline;
+          });
+      }
+
+      /* Chart interactivity: Revert highlighting in other chart */
+      d3.selectAll('.c2_circle')
+        .style('stroke', 'white')
+        .style('stroke-width', '1');
+      /* End chart interactivity */
+    };
+
+    // tslint:disable-next-line:no-shadowed-variable
+    function mouseClick(ths, d: any) {
+      if (!ths.isServicesChart) { return; }
+
+      // Hide tooltip. Use transition to help avoid unintentional new tooltips if transitioning nodes slide under cursor
+      ths.divTooltip1a.transition().duration(500).style('opacity', 0);
+
+      // If leaf node, handle selection / deselection of the node
+      if (d.depth === 2) {
+        // Mark as selected if no current selection or if click on a different node to select it
+        if (ths.isSelectionChart1a === false || ths.selectionDataChart1a !== d) {
+          d3.selectAll('.c1a_circle')
+            .style('stroke-width', function (o: any) {
+              return d.data.id === o.data.id ? ths.strokeServicesNodeSelected : ths.strokeServicesNodeOutline;
+            })
+            .style('stroke', function (o: any) {
+              return d.data.id === o.data.id ? ths.clrSelected : ths.clrServicesNodeOutline;
+            });
+
+          /* Chart interactivity: Show matching agents (only) in Chart2 - Bubble Chart */
+          let agents = null;
+          if (d.depth === 1) {
+            agents = d.data.agents;
+          } else { if (d.depth === 2) { agents = d.parent.data.agents; } }
+          ths.selectionAgentsListChart1a = agents;
+          if (ths.isSelectionChart1a === false || ths.selectionDataChart1a.parent.data.id !== d.parent.data.id) {
+            ths.drawChart2(ths);
+            // ths.isSelectionChart1a = true;
+            // ths.selectionDataChart1a = d;
+            // ths.updateChart2(ths);
+          }
+          /* End chart interactivity */
+
+          ths.isSelectionChart1a = true;
+          ths.selectionDataChart1a = d;
+        } else {  // Revert selection
+          d3.selectAll('.c1a_circle')
+            .style('stroke', ths.clrServicesNodeOutline)
+            .style('stroke-width', ths.strokeServicesNodeOutline);
+
+          ths.isSelectionChart1a = false;
+          ths.selectionDataChart1a = ths.selectionAgentListChart1a = null;
+
+          /* Chart interactivity: Show all agents again in other chart */
+          ths.drawChart2(ths);
+          /* End chart interactivity */
+        }
+
+        return;
+      }
+
+      // Else is non-leaf node. If expanded, collapse it
+      if (!ChartsComponent.isNodeCollapsed(d)) {
+        ChartsComponent.collapseNode(d);
+
+        // If there was a selection in Services chart, which is now hidden, cancel it
+        if (ths.isSelectionChart1a && (ths.selectionDataChart1a.parent.data.id === d.data.id || d.depth === 0)) {
+          ths.isSelectionChart1a = false;
+          ths.selectionDataChart1a = ths.selectionAgentListChart1a = null;
+          ths.drawChart2(ths);
+        }
+      } else {
+        ChartsComponent.expandNode(d);
+      }
+      ths.updateChart1a(ths, d);
+
+      // If there's a selection, insure that it gets redrawn
+      if (ths.isSelectionChart1a) {
+        d3.selectAll('.c1a_circle')
+          .style('stroke-width', function (o: any) {
+            return ths.selectionDataChart1a.data.id === o.data.id ? ths.strokeServicesNodeSelected : ths.strokeServicesNodeOutline;
+          })
+          .style('stroke', function (o: any) {
+            return ths.selectionDataChart1a.data.id === o.data.id ? ths.clrSelected : ths.clrServicesNodeOutline;
+          });
+      }
+    }
+
+    function buildNodeTooltipHTML(d, verbose) {
+      const headText = (d.data.id === null || d.data.id === '') ? d.data.description : d.data.description + '<hr>'
+        + 'Service ID ' + d.data.id;
 
       if (verbose) {
         const agentCount = d.data.agents ? d.data.agents.length : 0;
         const serviceCount = d.data.services ? d.data.services.length : 0;
+        const colorsIcon = './../../../assets/images/colors.png';
 
         return '<div class=\'node-detailed-tooltip\'> <table class=\'table\'> <thead> <tr> <th colspan=\'2\'>' + headText +
-          '</th> </tr> </thead> <tbody> <tr> <td class=\'collapsing\'> <span>Agent Count</span> </td> <td>' + agentCount +
+          '</th> </tr> </thead> <tbody> <tr> <td class=\'collapsing\'>'
+          + '<img src=\'' + colorsIcon + '\'' + 'width=\'28px\' height=\'auto\' style=\'padding-right:4px; margin-top:-2px\'/>'
+          + '<span>Agent Count</span> </td> <td>' + agentCount +
           '</td> </tr> <tr> <td> <span>Service Count</span> </td> <td>' + serviceCount +
           // '</td> </tr> <tr> <td> <span>TODO</span> </td> <td>' + d.data.TODO +
           '</td> </tr> </tbody> </table> </div>';
       } else {
-        return '<div class=\'node-tooltip\'> <table class=\'table\'> <tbody> <tr> <td nowrap> <b>' + headText +
-          '</b> </td> </tr> </tbody> </table> </div>';
+        return '<div class=\'node-tooltip\'> <table class=\'table\'> <tbody> <tr>'
+          + '<td nowrap style=\'border-top: none\'> <b>' + headText + '</b> </td> </tr> </tbody> </table> </div>';
       }
     }
   }  /* End of updateChart1a() */
 
   /*
-   * ## Agents Activity Stacked Bar Chart ##
+   * ## Chart 1b: Agents Activity Stacked Bar Chart ##
    */
 
   /*
@@ -594,15 +769,15 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
    * drawChart1b()
    */
   private drawChart1b(ths) {
-    const marginFactor = 0.85;
+    const marginFactor = 0.93;
     const width = document.getElementById('d3chart1_card_block').clientWidth * marginFactor;
     const height = document.getElementById('d3chart1_card_block').clientHeight * marginFactor;
     // console.log('drawChart1b: w=' + width + ', h=' + height);
 
     let barRects = null;
 
-    // Room for Card Footer buttons?
-    ths.isShowBtnsChart1 = false; // (width > ths.minWidthShowBtns) ? true : false;
+    ths.isShowBtnsChart1a = false;
+    // ths.isShowBtnsChart1b = (width > ths.minWidthShowBtns) ? true : false;
 
     const fileJSON = './../../../assets/activity.executed.json';
 
@@ -617,11 +792,13 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         for (const key in obj) {
           // console.log(key + '=' + obj[key]);
           if (key !== 'date' && (keys.indexOf(key) === -1)) {
-              keys.push(key);
-              // console.log('push(' + key + ')');
+            keys.push(key);
+            // console.log('push(' + key + ')');
           }
         }
       }
+      keys.sort();  // Sort agents (stack from bottom to top of each bar on chart).
+      // console.log('Activity Stacked Bar Chart: Agent Count=' + keys.length);
 
       // Construct chart series with data and keys
       const series = d3.stack()
@@ -632,6 +809,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       d3.select('#d3chart1').selectAll('*').remove();
       d3.select('#d3chart1_legend').selectAll('*').remove();
 
+      // Set SVG client area size and position
       ths.svg = d3.select('#d3chart1')
         .attr('width', width)
         .attr('height', height)
@@ -639,7 +817,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .attr('transform', 'translate(' + ths.svgMargin.left + ',' + ths.svgMargin.top + ')')
 
       // const margin = this.svgMargin;
-      const margin = { top: 20, right: 30, bottom: 45, left: 50 };
+      const margin = { top: 10, right: 30, bottom: 45, left: 50 };
 
       // Configure X scale
       const x = d3.scaleBand()
@@ -653,9 +831,11 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       const y = d3.scaleLinear()
         .domain([min, max])
         .rangeRound([height - margin.bottom, margin.top]);
+      // .nice();
 
       // Configure Z scale (colors)
       const z = d3.scaleOrdinal(d3.schemeCategory20c);
+      //      const z = d3.scaleLinear().domain([0, ths.serviceMaxPendCnt]).range([0, 1]);
 
       // Bars
       barRects = ths.svg.append('g')
@@ -663,6 +843,13 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .data(series)
         .enter().append('g')
         .attr('fill', function (d) { return z(d.key); })
+        // .attr('fill', function (d) {
+        //   const idx = ths.indexByField(ths.arrAgents, 'address', d.key);
+        //   const rating = ths.arrAgents[idx].rating.average;
+        //   const pendingCnt = ths.arrAgents[idx].pendContractsCnt;
+        //   // return interpolateRdYlBu(rating);
+        //   return interpolateRdYlBu(z(pendingCnt));
+        // })
         .selectAll('rect')
         .data(function (d) { return d; })
         .enter().append('rect')
@@ -675,7 +862,11 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
           const pDatum: any = d3.select(this.parentNode).datum();
           mouseOver(ths, d, pDatum);
         })
-        .on('mouseout', (d) => { mouseOut(ths, d); })
+        .on('mouseout', (d) => { mouseOut(ths, d); });
+      // .on('click', function (d: any) {
+      //   const pDatum: any = d3.select(this.parentNode).datum();
+      //   mouseClick(ths, d, pDatum);
+      // });
 
       // Bar selection rects
       ths.svg.append('g')
@@ -683,6 +874,13 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .data(series)
         .enter().append('g')
         .attr('fill', function (d) { return z(d.key); })
+        // .attr('fill', function (d) {
+        //   const idx = ths.indexByField(ths.arrAgents, 'address', d.key);
+        //   const rating = ths.arrAgents[idx].rating.average;
+        //   const pendingCnt = ths.arrAgents[idx].pendContractsCnt;
+        //   // return interpolateRdYlBu(rating);
+        //   return interpolateRdYlBu(z(pendingCnt));
+        // })
         .selectAll('rect')
         .data(function (d) { return d; })
         .enter().append('rect')
@@ -699,40 +897,65 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .attr('height', function (d) { return y(d[0]) - y(d[1]); })
         .style('opacity', 0)
         .style('stroke', ths.clrHighlight)
-        .style('stroke-width', ths.strokewidthHighlight);
+        .style('stroke-width', ths.strokeHighlight);
 
       // X Axis
       ths.svg.append('g')
         .attr('transform', 'translate(0,' + y(0) + ')')
         .call(d3.axisBottom(x))
         .selectAll('text')
-        .style('user-select', 'none')
-        .attr('y', 0)
-        .attr('x', 9)
+        .attr('y', 6)
+        .attr('x', 7)
         .attr('dy', '.35em')
         .attr('transform', 'rotate(45)')
+        .style('user-select', 'none')
         .style('text-anchor', 'start');
 
       // Y Axis
       ths.svg.append('g')
-        .style('user-select', 'none')
         .attr('transform', 'translate(' + margin.left + ',0)')
+        .style('user-select', 'none')
         .call(d3.axisLeft(y));
+
+      // Y Axis label
+      ths.svg.append('text')
+        .attr('transform', 'rotate(-90)')
+        // .attr('y', 0 - margin.left)
+        .attr('y', 0)
+        .attr('x', 0 - (height / 2))
+        .attr('dy', '1em')
+        .style('text-anchor', 'middle')
+        .style('user-select', 'none')
+        .style('font-size', '14px')
+        .text('Contracts');
 
       // Bar segment transition to make bar sections appear, ending with the correct height
       barRects.transition()
-      // .delay(50)
-      .duration(ths.durationFadeActivityChart)
-      .attr('height', function (d: any) { return y(d[0]) - y(d[1]); })
-      .attr('y', function (d) { return y(d[1]); });
+        // .delay(50)
+        .duration(ths.durationFadeActivityChart)
+        .attr('height', function (d: any) { return y(d[0]) - y(d[1]); })
+        .attr('y', function (d) { return y(d[1]); });
 
       // Legend
-      const xLegend = 10, yLegend = 30, widthLegend = 150, heightLegend = 20;
+      const label = ths.isActivityChartPendingMode ? 'Pending Contracts' : 'Executed Contracts';
+      const xLegend = 10, yLegend = 30, wLegend = 150, hLegend = 20;
       const svgLegend = d3.select('#d3chart1_legend');
-      svgLegend.append('text').attr('x', xLegend).attr('y', yLegend - 6).text('Executed Contracts')
+      svgLegend.append('text').attr('x', xLegend).attr('y', yLegend - 6).text(label)
         .style('user-select', 'none');
       svgLegend.append('text').attr('x', xLegend + 35).attr('y', yLegend + 12).text('by Agent')
         .style('user-select', 'none');
+      /*
+      const xLegend = 8, yLegend = 20, wLegend = 145, hLegend = 20;
+      const svgLegend = d3.select('#d3chart1_legend');
+      svgLegend.append('text').style('user-select', 'none')
+      // .attr('x', xLegend).attr('y', yLegend - 6)  // Left aligned.
+      .attr('x', xLegend / 2 + wLegend / 2).attr('y', yLegend - 6).attr('width', wLegend).style('text-anchor', 'middle')  // Centered.
+      .text('Pending Contracts');
+      const clrScale = d3.scaleSequential(interpolateRdYlBu).domain([0, ths.serviceMaxPendCnt]);
+      const clrBar = svgLegend.append('g').style('user-select', 'none')
+        .attr('transform', 'translate(' + xLegend + ',' + yLegend + ')')
+        .call(colorbarH(clrScale, wLegend, hLegend).tickValues([0, ths.serviceMaxPendCnt / 2, ths.serviceMaxPendCnt]));
+      */
 
       d3.select(self.frameElement).style('height', height + 'px');
     });
@@ -748,18 +971,20 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     // tslint:disable-next-line:no-shadowed-variable
     function mouseOver(ths, d: any, pDatum) {
       if (ths.isServicesChart) { return; }
-      d3.selectAll('.c1b_selectionrect')
-        .style('opacity', function (o: any) {
-          return d.data.date === o.data.date && d[1] === o[1] ? 1 : 0;
-        });
+      const agent = pDatum.key;
+      // d3.selectAll('.c1b_selectionrect')
+      //   .style('opacity', function (o: any) {
+      //     return d.data.date === o.data.date && d[1] === o[1] ? 1 : 0;
+      //   });
+      const agentClass = '.A' + agent;
+      d3.selectAll(agentClass).style('stroke', ths.clrHighlight).style('opacity', 1);
 
       /* Chart interactivity: Highlight matching agents in Chart2 - Bubble Chart */
-      const agent = pDatum.key;
       d3.selectAll('.c2_circle')
         .style('stroke', function (o: any) {
-          return agent === o.data.address ? ths.clrRemoteHighlight : 'white';
+          return agent === o.data.address ? ths.clrHighlight : 'white';
         }).style('stroke-width', function (o: any) {
-          return agent === o.data.address ? ths.strokewidthHighlight : '1';
+          return agent === o.data.address ? ths.strokeHighlight : '1';
         });
       /* End chart interactivity */
 
@@ -769,7 +994,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       const wTT = ths.divTooltip1b.node().clientWidth, hTT = ths.divTooltip1b.node().clientHeight;
       const xTT = evt.pageX < (window.innerWidth - wTT) - ths.marginTT ? evt.pageX + 12 : (evt.pageX + 12) - wTT;
       const yTT = evt.pageY < window.innerHeight - hTT ? evt.pageY - 12 : (evt.pageY - 12) - hTT;
-      ths.divTooltip1b.style('opacity', 0.9)
+      ths.divTooltip1b.style('opacity', ths.opacityTT)
         .style('left', xTT + 'px')
         .style('top', yTT + 'px');
     };
@@ -787,18 +1012,39 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       /* End chart interactivity */
     };
 
+    // tslint:disable-next-line:no-shadowed-variable
+    /*
+    function mouseClick(ths, d: any, pDatum) {
+      if (ths.isServicesChart) { return; }
+      ths.divTooltip1b.style('opacity', 0);
+
+      const agent = pDatum.key;
+      const agentClass = '.A' + agent;
+      d3.selectAll(agentClass).style('stroke', ths.clrSelected).style('opacity', 1);
+    }
+    */
+
     function buildNodeTooltipHTML(d, datum, verbose) {
       const agent = datum.key;
       const value = d.data[agent];
-      // console.log('Agent=' + agent + ', value=' + value);
+      const idx = ths.indexByField(ths.arrAgents, 'address', agent);
+      const pendingCnt = ths.arrAgents[idx].pendContractsCnt;
+      const sizeByIcon = './../../../assets/images/sizes-rect.png';
+      const colorsIcon = './../../../assets/images/colors.png';
 
-      return '<div class=\'node-tooltip\'> <table class=\'table\'> <tbody> <tr> <td nowrap>' + '<b>' + agent
-        + '</b>' + '<hr>' + value + ' Executed Contracts' + '</td> </tr> </tbody> </table> </div>';
+      return '<div class=\'node-tooltip\'> <table class=\'table\'> <thead> <tr> <th colspan=\'2\'>'
+        + '<b>Agent ' + agent + '</b> </th> </tr> </thead> <tbody> <tr> <td class=\'collapsing\'>' + '<img src=\''
+        + sizeByIcon + '\'' + 'width=\'28px\' height=\'auto\' style=\'padding-left:6px; padding-right:8px; margin-top:-2px\'/>'
+        + '<span>Executed Contracts</span> </td> <td>' + value + '</td> </tr> <tr> <td>'
+        + '<img src=\'' + colorsIcon + '\'' + 'width=\'28px\' height=\'auto\' style=\'padding-right:4px; margin-top:-2px\'/>'
+        + '<span>Pending Contracts</span> </td> <td>' + pendingCnt +
+        // '</td> </tr> <tr> <td> <span>TODO</span> </td> <td>' + d.data.TODO +
+        '</td> </tr> </tbody> </table> </div>';
     }
   }  /* End drawChart1b() */
 
   /*
-   * ## Agents Bubble Chart ##
+   * ## Chart2: Agents Bubble Chart ##
    */
 
   /*
@@ -827,13 +1073,13 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     let nodes = null, circles = null, labels = null;
     // console.log('drawChart2: w=' + width + ', h=' + height + ', d=' + diameter);
 
-    // Room for Card Footer buttons?
     ths.isShowBtnsChart2 = (width > ths.minWidthShowBtns) ? true : false;
 
     const fileJSON = './../../../assets/agents.json';
 
     // Pack bubbles
-    const bubble = d3.pack()
+    let root, treeData: any;
+    ths.bubble = d3.pack()
       // TODO: breaks overall bubble pack layout resizing
       // .radius(function (d: any) {
       //   const minValue = 50;  // Min bubble size.
@@ -845,15 +1091,43 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     // Get the data and build the elements
     d3.json(fileJSON, function (error, data: any) {
       if (error) { throw error; }
+      // console.log('Agents Bubble Chart: Agent Count=' + data.length);
+
+      ths.dataChart2 = data;
+
+      // Extract and save array of Agents from data
+      for (let i = 0; i < data.length; i++) {
+        const obj = data[i]
+        const agent = {
+          address: obj.address, description: obj.description, wealth: obj.wealth, rating: obj.rating,
+          pendContractsCnt: obj.pendingContracts.length
+        };
+        ths.arrAgents.push(agent);
+        // console.log('push(' + agent.address + ')');
+      }
+      ths.arrAgents.sort();
 
       // Add root node for d3.hierarchy
-      const treeData: any = { id: '', description: 'Agents', agents: data };
+      const data_selected = [];
+      if (ths.isSelectionChart1a === false) {
+        treeData = { id: '', description: 'Agents', agents: data };
+      } else {
+        // Build subtree of selected agents only
+        for (let i = 0; i < ths.selectionAgentsListChart1a.length; i++) {
+          const agent = ths.selectionAgentsListChart1a[i];
+          const idx = ths.indexByField(data, 'address', agent);
+          // console.log(agent + ', ' + idx);
+          if (idx !== -1) { data_selected.push(data[idx]); }
+        }
+        treeData = { id: '', description: 'Agents', agents: data_selected };
+        // console.log(data_selected);
+      }
 
       // Parse data into d3 hierarchy
-      const root = d3.hierarchy(classes(treeData))
+      root = d3.hierarchy(ths.classesChart2(treeData))
         .sum(function (d: any) { return d.value; })
         .sort(function (a, b) { return b.value - a.value; });
-      bubble(root);
+      ths.bubble(root);
 
       // Clear out everything from the SVG element for this chart
       d3.select('#d3chart2').selectAll('*').remove();
@@ -876,25 +1150,16 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       circles = nodes.append('circle')
         .attr('class', 'c2_circle')
         .attr('r', 0)  // Start at 0 radius. Will transition to actual radius.
-        .attr('cx',  function (d: any) { return d.cx; })
-        .attr('cy',  function (d: any) { return d.cy; })
         .style('fill', function (d: any) {
-          // d3.select(this).attr('color-val', d.data.rating_avg.toString());
-          const clr = interpolateRdYlBu(d.data.rating_avg);
-          // d.data.colorval = bubbleClr;
-          return clr;
+          return interpolateRdYlBu(d.data.rating_avg);
         })
         .on('mouseover', (d) => { mouseOver(ths, d); })
-        .on('mouseout', (d) => { mouseOut(ths, d); });
+        .on('mouseout', (d) => { mouseOut(ths, d); })
 
-      const font = ths.isFirefox ? 'sans-serif' : 'Open Sans';  // Open Sans not working on FF.
-      const fontsize = ths.isFirefox ? '12px' : '13.5px';
       labels = nodes.append('text')
-        .style('font-family', font)
-        .style('font-style', 'condensed')
-        .style('font-size', fontsize)
+        .style('font-family', ths.font)
+        .style('font-size', (ths.isSelectionChart1a ? ths.fontsize * 1.75 : ths.fontsize) + 'px')
         .style('font-weight', 'bold')
-        // .style('fill', 'white')
         .attr('dy', '.3em')
         .style('text-anchor', 'middle')
         .style('pointer-events', 'none')
@@ -902,7 +1167,8 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .style('opacity', '0')  // Start hidden. Will transition to visible.
         .text(function (d: any) {
           if (d.r < 14) { return ''; }
-          const id = d.data.address.substring(0, d.r / 5);
+          // const id = d.data.address.substring(0, d.r / 5);
+          const id = d.data.address.substring(0, d.r / (ths.isSelectionChart1a ? 9 : 5));
           return id.length < d.data.address.length ? id + '...' : id;
         });
 
@@ -919,15 +1185,17 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .style('opacity', '1');
 
       // Legend
-      const xLegend = 8, yLegend = 20, widthLegend = 145, heightLegend = 20;
+      const xLegend = 8, yLegend = 20, wLegend = 145, hLegend = 20;
       const svgLegend = d3.select('#d3chart2_legend');
-      svgLegend.append('text').style('user-select', 'none').attr('x', xLegend).attr('y', yLegend - 6)
-      .text('Agent Rating');
+      svgLegend.append('text').style('user-select', 'none')
+        // .attr('x', xLegend).attr('y', yLegend - 6)  // Left aligned.
+        .attr('x', xLegend / 2 + wLegend / 2).attr('y', yLegend - 6).attr('width', wLegend).style('text-anchor', 'middle')  // Centered.
+        .text('Agent Rating');
       const clrScale = d3.scaleSequential(interpolateRdYlBu).domain([0, 1]);
       const clrBar = svgLegend.append('g')
         .style('user-select', 'none')
         .attr('transform', 'translate(' + xLegend + ',' + yLegend + ')')
-        .call(colorbarH(clrScale, widthLegend, heightLegend).tickValues([0, 0.5, 1]));
+        .call(colorbarH(clrScale, wLegend, hLegend).tickValues([0, 0.5, 1]));
 
       d3.select(self.frameElement).style('height', diameter + 'px');
     });
@@ -938,7 +1206,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
         .style('stroke', function (o: any) {
           return d.data.address === o.data.address ? ths.clrHighlight : 'white';
         }).style('stroke-width', function (o: any) {
-          return d.data.address === o.data.address ? ths.strokewidthHighlight : '1';
+          return d.data.address === o.data.address ? ths.strokeHighlight : '1';
         });
 
       /* Chart interactivity: Highlight matching agents... */
@@ -946,17 +1214,21 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       if (ths.isServicesChart) {
         // ...in Chart1a - Services Ontology Tree Chart
         d3.selectAll('.c1a_circle')
-        .style('stroke', function (o: any) {
-          const match = ths.contains(o.data.agents, agent);
-          return match ? ths.clrRemoteHighlight : ths.clrServicesNodeOutline;
-        }).style('stroke-width', function (o: any) {
-          const match = ths.contains(o.data.agents, agent);
-          return match ? ths.strokewidthHighlight : '3';
-        });
+          .style('stroke', function (o: any) {
+            const match = o.data.agents ? ths.index(o.data.agents, agent) >= 0 : ths.index(o.parent.data.agents, agent) >= 0;
+            return match ? ths.clrHighlight : ths.clrServicesNodeOutline;
+          }).style('stroke-width', function (o: any) {
+            if (ths.isSelectionChart1a && ths.selectionDataChart1a.data.id === o.data.id) {
+              return ths.strokeServicesNodeSelected;
+            } else {
+              const match = o.data.agents ? ths.index(o.data.agents, agent) >= 0 : ths.index(o.parent.data.agents, agent) >= 0;
+              return match ? ths.strokeServiceHighlight : ths.strokeServicesNodeOutline;
+            }
+          });
       } else {
         // ...in Chart1b - Activities Stacked Bar Chart
         const agentClass = '.A' + agent;
-        d3.selectAll(agentClass).style('stroke', ths.clrRemoteHighlight).style('opacity', 1);
+        d3.selectAll(agentClass).style('stroke', ths.clrHighlight).style('opacity', 1);
       }
       /* End chart interactivity */
 
@@ -966,7 +1238,7 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       const wTT = ths.divTooltip2.node().clientWidth, hTT = ths.divTooltip2.node().clientHeight;
       const xTT = evt.pageX < (window.innerWidth - wTT) - ths.marginTT ? evt.pageX + 12 : (evt.pageX - 12) - wTT;
       const yTT = evt.pageY < window.innerHeight - hTT ? evt.pageY - 12 : (evt.pageY + 12) - hTT;
-      ths.divTooltip2.style('opacity', 0.9)
+      ths.divTooltip2.style('opacity', ths.opacityTT)
         .style('left', xTT + 'px')
         .style('top', yTT + 'px');
     };
@@ -981,8 +1253,20 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
       /* Chart interactivity: Revert highlighting in other chart */
       if (ths.isServicesChart) {
         d3.selectAll('.c1a_circle')
-        .style('stroke', ths.clrServicesNodeOutline)
-        .style('stroke-width', '3');
+          .style('stroke', function (o: any) {
+            if (ths.isSelectionChart1a && ths.selectionDataChart1a.data.id === o.data.id) {
+              return ths.clrSelected;
+            } else {
+              return ths.clrServicesNodeOutline;
+            }
+          })
+          .style('stroke-width', function (o: any) {
+            if (ths.isSelectionChart1a && ths.selectionDataChart1a.data.id === o.data.id) {
+              return ths.strokeServicesNodeSelected;
+            } else {
+              return '3';
+            }
+          });
       } else {
         d3.selectAll('.c1b_selectionrect').style('stroke', ths.clrHighlight).style('opacity', 0);
       }
@@ -990,46 +1274,139 @@ export class ChartsComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     function buildNodeTooltipHTML(d, verbose) {
-      const headText = (d.data.description === '') ? d.data.address : d.data.description + '<hr>' + d.data.address;
+      const headText = (d.data.description === '') ? 'Agent ' + d.data.address : d.data.description + '<hr>'
+        + 'Agent ' + d.data.address;
 
       if (verbose) {
-        const wealthFormat = d3.format(',.8f');
+        const wealthFormat = d3.format(',.2f');
         const wealthText = wealthFormat(d.data.wealth) + ' AGI';
-        const pendContracts = d.data.pend_contracts ? d.data.pend_contracts.length : 0;
-        const execContracts = d.data.exec_contracts ? d.data.exec_contracts.length : 0;
+        // const pendContracts = d.data.pend_contracts ? d.data.pend_contracts.length : 0;
+        // const execContracts = d.data.exec_contracts ? d.data.exec_contracts.length : 0;
+        const sizeByIcon = './../../../assets/images/sizes-circ.png';
+        const colorsIcon = './../../../assets/images/colors.png';
 
-        return '<div class=\'node-detailed-tooltip\'> <table class=\'table\'> <thead> <tr> <th colspan=\'2\'>'
-          + headText + '</th> </tr> </thead> <tbody> <tr> <td class=\'collapsing\'> <span>Wealth</span> </td> <td>'
-          + wealthText + '</td> </tr> <tr> <td> <span>Rating Count</span> </td> <td>' + d.data.rating_cnt
-          + '</td> </tr> <tr> <td> <span>Rating Average</span> </td> <td>' + d.data.rating_avg
-          + '</td> </tr> <tr> <td> <span>Pending Contract Count</span> </td> <td>' + pendContracts
-          + '</td> </tr> <tr> <td> <span>Executed Contract Count</span> </td> <td>' + execContracts
-          // '</td> </tr> <tr> <td> <span>TODO</span> </td> <td>' + d.data.TODO +
+        return '<div class=\'node-detailed-tooltip\'> <table class=\'table\'> <thead> <tr> <th colspan=\'2\'>' +
+          headText + '</th> </tr> </thead> <tbody> <td class=\'collapsing\'>' + '<img src=\'' + sizeByIcon + '\''
+          + 'width=\'36px\' height=\'auto\' style=\'padding-right:3px; margin-left:-10px; margin-top:-7px\'/>'
+          + '<span>Wealth</span> </td> <td>' + wealthText + '</td> </tr> <tr> <td>'
+          + '<img src=\'' + colorsIcon + '\'' + 'width=\'28px\' height=\'auto\' style=\'padding-right:4px; margin-top:-2px\'/>'
+          + '<span>Agent Rating (average)</span> </td> <td>' + d.data.rating_avg
+          + '</td> </tr> <tr> <td> <span>Agent Rating Count</span> </td> <td>' + d.data.rating_cnt
+          // + '</td> </tr> <tr> <td> <span>Pending Contract Count</span> </td> <td>' + pendContracts
+          // + '</td> </tr> <tr> <td> <span>Executed Contract Count</span> </td> <td>' + execContracts
+          // + '</td> </tr> <tr> <td> <span>TODO</span> </td> <td>' + d.data.TODO +
           + '</td> </tr> </tbody> </table> </div>';
       } else {
         return '<div class=\'node-tooltip\'> <table class=\'table\'> <tbody> <tr> <td nowrap>' + headText +
           '</td> </tr> </tbody> </table> </div>';
       }
     }
-
-    // Returns a flattened hierarchy containing all leaf nodes under the root.
-    function classes(root) {
-      const classes = [];
-
-      function recurse(name, nde) {
-        if (nde.agents) {
-          nde.agents.forEach(function (child) { recurse(nde.agents, child); });
-        } else {
-          classes.push({
-            value: nde.wealth, address: nde.address, description: nde.description, wealth: nde.wealth,
-            rating_avg: nde.rating.average, rating_cnt: nde.rating.count, services: nde.services,
-            exec_contracts: nde.executedContracts, pend_contracts: nde.pendingContracts
-          });
-        }
-      }
-
-      recurse(null, root);
-      return { children: classes };
-    }
   }  /* End drawChart2() */
+
+  /*
+   * TODO: updateChart2()
+   */
+  private updateChart2(ths) {
+    // console.log('updateChart2()');
+    let nodes = null, circles = null, labels = null;
+    let root, treeData: any;
+    const data_selected = [], data = ths.dataChart2;
+    const duration = 2000;
+
+    if (ths.isSelectionChart1a === false) {
+      treeData = { id: '', description: 'Agents', agents: data };
+    } else {
+      // Build subtree of selected agents only
+      for (let i = 0; i < ths.selectionAgentsListChart1a.length; i++) {
+        const agent = ths.selectionAgentsListChart1a[i];
+        const idx = ths.indexByField(data, 'address', agent);
+        // console.log(agent + ', ' + idx);
+        if (idx !== -1) { data_selected.push(data[idx]); }
+      }
+      treeData = { id: '', description: 'Agents', agents: data_selected };
+      // console.log('updateChart2(): selection=' + data_selected);
+    }
+
+    // Parse data into d3 hierarchy
+    root = d3.hierarchy(ths.classesChart2(treeData))
+      .sum(function (d: any) { return d.value; })
+      .sort(function (a, b) { return b.value - a.value; });
+    ths.bubble(root);
+
+    const svg = d3.select('#d3chart2');
+
+    // JOIN
+    // nodes = svg.selectAll('c2_node')
+    nodes = svg.selectAll('g.c2_node')
+      .data(root.children, function (d: any) { return d.data.address; })
+    circles = nodes.selectAll('.c2_circle');
+    labels = nodes.selectAll('text');
+
+    // EXIT
+    nodes.exit().remove();
+    circles.exit().remove();
+    labels.exit().remove();
+
+    // UPDATE
+    nodes
+      .transition().duration(duration)
+      .attr('transform', function (d: any) { return 'translate(' + d.x + ',' + d.y + ')'; });
+
+    circles
+      .transition().duration(duration)
+      .attr('r', function (d) { return d.r * 2 });
+
+    labels
+      .transition().duration(duration)
+      .style('font-size', (ths.fontsize * 1.75) + 'px');
+
+    // ENTER
+    nodes
+      .enter().append('g')
+      .attr('class', 'c2_node')
+      .transition().duration(duration)
+      .attr('transform', function (d: any) { return 'translate(' + d.x + ',' + d.y + ')'; });  // TODO: Not working.
+
+    circles = nodes.enter().append('circle')
+      .attr('class', 'c2_circle')
+      .transition().duration(duration)
+      .attr('r', function (d) { return d.r })
+      .style('fill', function (d: any) {
+        return interpolateRdYlBu(d.data.rating_avg);
+      });
+
+    labels = nodes.append('text')
+      .style('font-family', ths.font)
+      .style('font-size', (ths.fontsize) + 'px')
+      .style('font-weight', 'bold')
+      .attr('dy', '.3em')
+      .style('text-anchor', 'middle')
+      .style('pointer-events', 'none')
+      .style('user-select', 'none')
+      .style('opacity', '0')  // Start hidden. Will transition to visible.
+      .text(function (d: any) {
+        if (d.r < 14) { return ''; }
+        const id = d.data.address.substring(0, d.r / 5);
+        return id.length < d.data.address.length ? id + '...' : id;
+      });
+  }  /* End updateChart2() */
+
+  // Returns a flattened hierarchy containing all leaf nodes under the root.
+  private classesChart2(root) {
+    const classes = [];
+    recurse(null, root);
+    return { children: classes };
+
+    function recurse(name, nde) {
+      if (nde.agents) {
+        nde.agents.forEach(function (child) { recurse(nde.agents, child); });
+      } else {
+        classes.push({
+          value: nde.wealth, address: nde.address, description: nde.description, wealth: nde.wealth,
+          rating_avg: nde.rating.average, rating_cnt: nde.rating.count, services: nde.services,
+          exec_contracts: nde.executedContracts, pend_contracts: nde.pendingContracts
+        });
+      }
+    }
+  }
 }
